@@ -1,0 +1,4222 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WARM-HEART</title>
+
+  <link rel="icon" href="favicon.ico?v=3" type="image/x-icon">
+  <link rel="shortcut icon" href="favicon.ico?v=3" type="image/x-icon">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon.png?v=3">
+
+
+
+<link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css" rel="stylesheet">
+
+
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body, html 
+{
+  height: 100%;
+  overflow: auto;
+  min-height: 200vh; /* 화면 높이 2배로 늘려서 스크롤 발생 */
+}
+
+/* 배경 비디오 */
+.bg-video 
+{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+}
+
+    /* 내비게이션 */
+nav 
+{
+  position: relative;
+  z-index: 20;
+  /*for desktops menu gradient here */
+  /*background: linear-gradient(to right, rgb(252, 96, 48), #fcb827);*/
+  background: transparent;
+  text-align: center;
+}
+.next-button {
+  position: fixed;
+  top: 50%;
+  right: 20px; /* 우측 여백 조절 */
+  transform: translateY(-50%);
+  padding: 10px 15px;
+  background-color: rgba(255, 124, 2, 0.6);
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000; /* 다른 요소 위에 표시되게 */
+}
+
+.next-button:hover 
+{
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+
+
+.youtube-btn 
+{
+  position: fixed;
+  top: 10px;          /* 상단 여백 */
+  right: 0px;        /* 오른쪽 여백 */
+  
+  display: flex;
+  align-items: center;
+  gap: 8px;           /* 아이콘과 텍스트 간격 */
+  
+  padding: 10px 14px;
+  background: transparent;
+  border-radius: 20px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  
+  z-index: 1000;
+  transition: all 0.25s ease;
+}
+
+/* 아이콘 크기 */
+.youtube-btn img 
+{
+  width: 80px;
+  height: 80px;
+}
+
+/* 호버 효과 */
+.youtube-btn:hover 
+{
+  background: rgb(0, 0, 0);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+
+
+.menu-bar 
+{
+  display: flex;
+  gap: 5px;        /* 메뉴 간격 */
+    align-items: center;       /* 세로 가운데 정렬 */
+  padding-right: 70px; /* header padding과 동일하게 */
+}
+
+.menu-bar img
+{
+  width: 110px;
+  height: 90px; /* 고정 높이 설정 */
+  
+}
+
+.menu-bar a {
+  position: relative;
+  padding-right: 20px; /* 글자와 라인 간격 */
+}
+
+/* 마지막 메뉴 제외하고 글자 옆에 선 넣기 */
+.menu-bar a:not(:last-child):not(:first-child)::after {
+  content: "—————";    /* 가로 라인 */
+  position: absolute;
+  right: -150px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000000;
+  font-size: 30px;
+  font-weight: 300;
+}
+
+/* 드롭다운 그룹 (하위 메뉴) */
+.dropdown-group 
+{
+  display: flex;
+  gap : 10px; 
+  
+  align-items: flex-end;      /* 오른쪽 정렬 */
+
+  background-color:  transparent;
+  padding: 20px 20px 20px 60px;
+  
+
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  left: 250px;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 99;
+}
+
+
+    
+
+/* 하위 메뉴 열릴 때 효과 */
+nav:hover .dropdown-group 
+{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 각 드롭다운 섹션 */
+.dropdown-section 
+{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.dropdown-section h4 
+{
+  margin-bottom: 10px;
+  color: #0047ab;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.dropdown-section a 
+{
+  color: #333;
+  
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.dropdown-section a:hover 
+{
+  color: #0047ab;
+  text-decoration: underline;
+}
+
+nav a 
+{
+ color: black; /* 기본 글자색 */
+  margin: 0 70px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 30px;        /* 글자 크기 */
+  padding: 10px 10px;     /* 내부 여백: 동그라미 크기 ↑ */
+  border-radius: 40%; /* 동그란 모양을 위해 */
+   transition: all 0.3s ease;
+}
+
+
+
+
+
+.warmheartedSub-text 
+{
+ font-family: 'NanumYeonJiCe';
+  position: relative;
+  z-index: 2;
+  color: #ffd28e;
+  font-size: 30pt;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px; /* 전문적이고 효율적인 인재 매칭 서비스 수직 위치*/
+  margin-bottom: -5px; /* 4개 이미지 수직 위치 */
+  user-select: none;
+
+  text-shadow:
+-2px -1px 0 #ff9900,
+  2px -1px 0 #ff9900,
+-2px  1px 0 #ff9900,
+  2px  1px 0 #ff9900;
+  
+}
+
+.warmhearted-text 
+{
+  font-family: 'NanumYeonJiCe';
+  
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  font-size: 40pt;
+  font-weight: bold;
+  
+  text-align: center;
+  margin-top: 150px; /* 이미지 margin-top 300px보다 10px 위 */
+  user-select: none;
+
+  text-shadow:
+  -2px -1px 0 #0047ab,
+  2px -1px 0 #0047ab,
+  -2px  1px 0 #0047ab,
+  2px  1px 0 #0047ab;
+  
+}
+
+    
+/* 새로 추가 */
+.slider-wrapper 
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  margin-top: 20px;
+}
+
+/* 상단 슬라이더 */
+.top-slider {
+  display: flex;
+  gap: 100px;
+  /*animation: slide-horizontal 2s ease-in-out infinite alternate;*/
+  margin-bottom: 400px;  
+}
+
+/* 하단 3x3 그리드 */
+.bottom-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  z-index: 2;
+}
+
+/* 공통 이미지 스타일 */
+.slider-container img,
+.bottom-grid img {
+  width: 300px;
+  height: 200px; /* 고정 높이 설정 */
+  object-fit: cover; /* 이미지 잘라서 채우기 */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s;
+}
+
+/* 이미지 영역 끝~아래 파트 사이 gap 제거 */
+.bis-slider-container {
+  margin-bottom: 50px !important;
+  padding-bottom: 0 !important;
+}
+
+/* p 태그 기본 여백 제거 → 가장 중요한 부분 */
+.bis-slider-container p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+
+
+
+/* 이미지 영역 끝~아래 파트 사이 gap 제거 */
+.histoy-slider-container {
+  margin-bottom: 50px !important;
+  padding-bottom: 0 !important;
+}
+
+/* p 태그 기본 여백 제거 → 가장 중요한 부분 */
+.histoy-slider-container p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+
+
+
+/* 아래 2단 안내문이 이미지에 더 붙도록 */
+.bottom-info-wrap {
+  margin-top: 5px !important; /* 0~10px 중 마음대로 조절 */
+  padding-top: 0 !important;
+}
+
+
+.slider-container img:hover,
+.bottom-grid img:hover {
+  transform: scale(1.05);
+ 
+}
+
+.menu-item {
+  position: relative;
+  display: inline-block;
+}
+
+.menu-item a 
+{
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+  font-weight: bold;
+  position: relative;
+  z-index: 10;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 10px 0;
+  min-width: 160px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  display: none;
+  flex-direction: column;
+  z-index: 99;
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px 20px;
+  color: #0047ab;
+  font-weight: normal;
+  text-align: left;
+}
+
+.dropdown a:hover {
+  background-color: #e5f0ff;
+  color: #003a90;
+}
+
+/* Hover 시 드롭다운 표시 */
+.menu-item:hover .dropdown {
+  display: flex;
+  animation: dropdownFade 0.3s ease-in-out;
+
+  /*animation: <이름> <지속시간> <타이밍> <반복횟수> <방향>;*/
+}
+
+.bg-video::-webkit-media-controls {
+  display: none !important;
+}
+
+.bg-video::-moz-media-controls {
+  display: none !important;
+}
+
+.bg-video::-ms-media-controls {
+  display: none !important;
+}
+
+@keyframes slide-left {
+  0% { transform: translateX(0%); }
+  20% { transform: translateX(0%); }
+
+  25% { transform: translateX(-100%); }
+  45% { transform: translateX(-100%); }
+
+  50% { transform: translateX(-200%); }
+  70% { transform: translateX(-200%); }
+
+  75% { transform: translateX(-300%); }
+  100% { transform: translateX(-300%); }
+}
+ 
+
+@keyframes circle1-mobile {
+   0% {
+    left: 0;
+    opacity: 1;
+  }
+  100% {
+    left: calc(50% - 150px); /* 화면 가운데 - 원 반지름 */
+    opacity: 1;
+  }
+}
+
+@keyframes circle2-mobile {
+ 0% {
+    right: 0;
+    opacity: 1;
+  }
+  100% {
+    right: calc(50% - 150px); /* 화면 가운데 - 원 반지름 */
+    opacity: 1;
+  }
+}
+/* 모바일 전용 애니메이션 트리거 클래스 */
+@media (max-width: 1400px) 
+{
+
+}
+
+@keyframes dropdownFade 
+{
+  from 
+  {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to 
+  {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* 애니메이션 */
+@keyframes slide-horizontal 
+{
+  0% { transform: translateX(-20px); }
+  100% { transform: translateX(20px); }
+}
+
+
+@keyframes slideUp {
+  from 
+  {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to 
+  {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDownOut 
+{
+  from 
+  {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to 
+  {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+
+
+/* 서브메뉴에 대한 일반 페이지 형식 */
+.normal-sub-menu-page a 
+{
+    display: block;
+    margin-bottom: 10px;    
+    padding: 20px 0;     /*It's only for moblie mode*/
+    border-radius: 12px;         /* 라운드 처리 */
+    font-weight: bold; /* 또는 700 */
+    text-align: center;
+
+    color: white; /* 글씨 색상 */
+    text-shadow:
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000; /* 검정 테두리 */
+
+  text-decoration: none;    /* remove underline for font */
+  font-weight: bold;        /* font bold */
+  color: rgb(190, 231, 221);             /* text color (can change colors you want) */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);  /* shadows looks like outline*/
+  
+}
+
+
+.normal-slide-menu 
+{
+ position: fixed;
+  top: 20px;     /* 햄버거 버튼 아래에서 시작 */
+  right: 15px;    /* 햄버거 버튼과 같은 위치 */
+  width: 350px;
+  height: auto;
+  max-height: 20vh;
+  /*menu gradient only for phones and tap*/
+
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  
+  padding: 20px;
+  border-radius: 10px;
+  transform: scale(0); /* 처음에는 숨김 상태 */
+  transform-origin: top left;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 999;
+}
+
+.vertical-text-CEO {
+  writing-mode: vertical-rl; /* 세로 쓰기, 오른쪽에서 왼쪽으로 */
+  text-orientation: upright;  /* 글자 방향을 똑바로 */
+  font-size: 20px;
+  font-weight: bold;
+  position: absolute;         /* 위치 조정 가능 */
+  left: 0;                    /* 좌측 정렬 */
+  top: 40%;                   /* 중앙 정렬 */
+  transform: translateY(-53%);
+  margin-left: 30px;   /* 세로글을 오른쪽으로 이동 */
+}
+
+
+.vertical-text-busniess {
+   writing-mode: vertical-rl; /* 세로 쓰기, 오른쪽에서 왼쪽으로 */
+  text-orientation: upright;  /* 글자 방향을 똑바로 */
+  font-size: 20px;
+  font-weight: bold;
+  position: absolute;         /* 위치 조정 가능 */
+  left: 0;                    /* 좌측 정렬 */
+  top: 40%;                   /* 중앙 정렬 */
+  transform: translateY(-53%);
+  margin-left: 30px;   /* 세로글을 오른쪽으로 이동 */
+}
+
+.normal-slide-sub-menu a 
+{
+    display: block;
+    margin-bottom: 10px;    
+    padding: 20px 0;     /*It's only for moblie mode*/
+    border-radius: 12px;         /* 라운드 처리 */
+    font-weight: bold; /* 또는 700 */
+    text-align: left;
+
+    color: white; /* 글씨 색상 */
+    text-shadow:
+    -1px -1px 0 #000,  
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000; /* 검정 테두리 */
+
+  text-decoration: none;    /* remove underline for font */
+  font-weight: bold;        /* font bold */
+  color: rgb(190, 231, 221);             /* text color (can change colors you want) */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);  /* shadows looks like outline*/
+  
+}
+
+
+
+
+
+.normal-right-menu 
+{
+  /* right main page by left menu 20250922  */
+ position: fixed;
+  top: 100px;     
+  left: 300px;    /* 햄버거 버튼과 같은 위치 */
+  width: 250px;
+  height: auto;
+  max-height: 80vh;
+  /*menu gradient only for phones and tap*/
+ background: linear-gradient(to bottom,
+  rgb(104, 139, 179),
+  
+  #5e9c56);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  
+  padding: 20px;
+  border-radius: 10px;
+  transform: scale(0); /* 처음에는 숨김 상태 */
+  transform-origin: top left;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 999;
+}
+
+
+
+
+
+
+.mobile-slide-menu.open 
+{
+  transform: scale(1);
+  opacity: 1;
+  /* transform: translate(0, 0); ← mobile menu slide function */
+}
+
+.mobile-slide-menu.closing 
+{
+  top: -100%;
+  transition: top 0.5s ease;
+}
+
+/* 열릴 때 애니메이션 효과 */
+@keyframes slideDown 
+{
+  from {
+    top: -100%;
+  }
+  to {
+    top: 0;
+  }
+}
+
+/* creating mobile button or not? */
+.mobile-menu-btn 
+{
+    display: none;
+   
+    position: fixed;
+    width: 1px; /* 또는 원하는 크기로 조절 */
+    height: 1px;
+    top: 20px;
+    left: 20px;
+    font-size: 30px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 12px 16px;
+    border-radius: 8px;
+    z-index: 1000;
+    cursor: pointer;
+
+}
+
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 998;
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100vh;
+  background: white;
+  z-index: 999;
+  padding: 20px;
+}
+
+
+
+.hidden {
+  display: none;
+}
+
+#overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+}
+
+#menu {
+  position: fixed;
+  top: 0; right: 0;
+  width: 250px;
+  height: 100vh;
+  background: white;
+  z-index: 101;
+  /* 메뉴 슬라이드 효과도 추가 가능 */
+}
+
+.slider-container 
+{
+    display: none;
+}
+
+
+/*@media (max-width: 768px) */
+@media (max-width: 1400px)
+{
+
+ .slider-container.top-slider 
+ {
+    display: none !important;
+ }
+
+  .warmheartedSub-text 
+  {
+    position: relative;
+    z-index: 2;
+    color: #fafc7d;
+    font-size: 17pt;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px; /* 이미지 margin-top 300px보다 10px 위 */
+    margin-bottom: 100px; /* 이미지 margin-top 300px보다 10px 위 */
+    user-select: none;
+
+    text-shadow:
+    -2px -1px 0 #0047ab,
+    2px -1px 0 #0047ab,
+    -2px  1px 0 #0047ab,
+    2px  1px 0 #0047ab;
+  }
+
+  .top-slider 
+  {
+    flex-direction: column; /* 가로 → 세로 */
+    align-items: center;     /* 가운데 정렬 */
+    gap: 40px;               /* 이미지 간 간격 */
+    margin-bottom: 100px;
+  }
+
+  .top-slider .image-with-caption 
+  {
+    max-width: 90%;          /* 폭 제한 */
+  }
+
+
+ .bis-image-with-caption 
+  {
+   max-width: 90%;         /* 폭 제한 */
+
+
+  }
+
+
+  .image-with-caption 
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    max-width: 70%; /* 필요에 따라 조절 */
+    margin: 0 auto;
+  }
+
+  .bis-image-with-caption 
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    max-width: 80%; /* 필요에 따라 조절 */
+    margin: 30px auto;
+     align-items: center;     /* 가운데 정렬 */
+  }
+
+
+  .mobile-slide-menu img 
+  {
+    max-width: 80%;   /* 이미지 크기 조절 */
+    height: auto;
+  }
+
+
+  .menu-bar 
+  {
+    display: none;
+  }
+  .slider-container 
+  {
+    display: none;
+  }
+
+
+  .mobile-menu-btn 
+  {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: scale(0.1, 0.1);  /* 가로 세로 각각 25% 확대 */
+
+      
+      top: 50px;
+      left: 40px;
+      font-size: 50px;       /* 크기 키움 */
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 14px 20px;    /* 버튼 내부 여백 */
+      border-radius: 8px;
+      z-index: 1000;
+      cursor: pointer;
+ 
+  }
+
+  .mobile-menu ul li {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* 라인 추가 */
+}
+
+.mobile-menu ul li:last-child {
+  border-bottom: none; /* 마지막 메뉴는 라인 제거 */
+}
+
+
+.slider-container 
+  {
+    flex-direction: column !important; /* 강제 적용 */
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 100px;
+  }
+  
+}
+
+  /*@media (min-width: 769px) */
+  @media (min-width: 1401px) 
+  {
+    
+
+    
+  .menu-bar a
+  {
+    display: inline-block;
+    
+    padding-right: 10px; /* 원하는 만큼 오른쪽으로 밀기 */
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #333;
+    
+  }
+
+  .menu-bar a:hover {
+  background-color: rgba(200, 224, 255, 0.8); /* 반투명 흰색 */
+  color: #000;
+}
+
+  .dropdown-group a 
+  {
+    display: inline-block;
+    
+    padding-left: -80px; /* 서브 메뉴 간격 */
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .mobile-slide-menu
+  {
+      display: none;      
+  }
+  .image-with-caption 
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+    
+  .menu-bar 
+  {
+    display: flex;
+    gap: 40px;        /* 메뉴 간격 */
+  }
+  .slider-container 
+  {
+      
+      flex-direction: column;
+      animation: slide-vertical 3s ease-in-out infinite alternate;
+      margin-top: 50px;
+      gap: 5px;
+      display: none;
+  }
+
+  .mobile-menu-btn 
+  {     
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      font-size: 50px;       /* 크기 키움 */
+      color: white;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 14px 20px;    /* 버튼 내부 여백 */
+      border-radius: 8px;
+      z-index: 1000;
+      cursor: pointer;
+      display: none;
+  }
+
+  .slider-container 
+  {
+    display: none;
+    flex-direction: column;
+    animation: slide-vertical 3s ease-in-out infinite alternate;
+    margin-top: 50px;
+    gap: 5px;
+  }
+}
+  
+.slider-container 
+{
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    margin-bottom: 400px;
+}
+
+.slider-container img
+{
+  width: 80vw;
+  max-width: 300px;
+
+}
+
+
+      
+
+/* 첫 번째 이미지에만 여유 공간 (팝업 여백) */
+.slider-container img.first-image-padding 
+{
+  margin-bottom: 150px; /* 팝업 높이만큼 확보 */
+  transition: margin-bottom 0.3s ease;
+}
+@keyframes slideDiagonal 
+{
+  from 
+  {
+    transform: translate(-100%, 100%);
+    opacity: 0;
+  }
+  to 
+  {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+
+/* 슬라이드 메뉴가 열릴 때 애니메이션 적용 */
+.mobile-lisde-menu.open 
+{
+  animation: slideDiagonal 0.5s forwards ease;
+  pointer-events: auto;
+}
+
+
+
+
+.business-popup /**/
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 50px !important;
+  width: 10.5vw; /* 가로 꽉 채우기 */
+  height: auto; /* 세로 0% */
+  background-color: transparent;
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  
+  border: 2px solid #ff0000; /* 선명한 흰색 테두리 */
+  /* 기존 그림자 제거 */
+  /* box-shadow: 0 -4px 10px rgba(255, 255, 255, 0.3); */
+  z-index: 52;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+.business  a
+{
+
+  color: #f8f8f8;
+  text-decoration: none;
+ 
+}
+
+
+
+
+
+
+.customer-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 50px !important;
+  width: 8.5vw; /* 가로 꽉 채우기 */
+  height: auto; /* 세로 0% */
+  background-color: transparent;
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  
+  border: 2px solid #ff7402; /* 선명한 흰색 테두리 */
+  /* 기존 그림자 제거 */
+  /* box-shadow: 0 -4px 10px rgba(255, 255, 255, 0.3); */
+  z-index: 52;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+.customer  a
+{
+
+  color: #f8f8f8;
+  text-decoration: none;
+ 
+}
+
+
+.manager-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+   left: 50px !important;
+  width: 8.5vw; /* 가로 꽉 채우기 */
+  height: auto; /* 세로 0% */
+  background-color: transparent;
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  
+  border: 2px solid #ffee00; /* 선명한 흰색 테두리 */
+  /* 기존 그림자 제거 */
+  /* box-shadow: 0 -4px 10px rgba(255, 255, 255, 0.3); */
+  z-index: 52;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+.manager  a
+{
+
+  color: #f8f8f8;
+  text-decoration: none;
+ 
+}
+
+
+
+
+.social-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 50px !important;
+  width: 8.5vw; /* 가로 꽉 채우기 */
+  height: auto; /* 세로 0% */
+  background-color: transparent;
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  
+  border: 2px solid #02ff17; /* 선명한 흰색 테두리 */
+  /* 기존 그림자 제거 */
+  /* box-shadow: 0 -4px 10px rgba(255, 255, 255, 0.3); */
+  z-index: 52;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+.social  a
+{
+
+  color: #f8f8f8;
+  text-decoration: none;
+ 
+}
+
+
+.business-right-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(255, 255, 255),
+    
+    #f8f4f4);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  border: 2px solid #ff0202; /* 선명한 흰색 테두리 */
+  z-index: 53;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+.business-right-popup  a
+{
+
+  color: #000000;
+  text-decoration: none;
+  right: 200px;
+  
+}
+
+.business-right-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+
+
+.head-right-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(255, 255, 255),
+    
+    #f8f4f4);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  border: 2px solid #ff0202; /* 선명한 흰색 테두리 */
+  z-index: 53;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+.head-right-popup  a
+{
+
+  color: #000000;
+  text-decoration: none;
+  right: 200px;
+  
+}
+
+.head-right-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+
+
+
+.services-right-popup 
+{
+
+
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(255, 255, 255),
+    
+    #f8f4f4);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  border: 2px solid #ff9a02; /* 선명한 흰색 테두리 */
+  z-index: 53;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+.services-right-popup  a
+{
+
+  color: #000000;
+  text-decoration: none;
+  right: 200px;
+  
+}
+
+.services-right-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+
+.managing-right-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+ background: linear-gradient(to bottom,
+    rgb(255, 255, 255),
+    
+    #edffeb);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  border: 2px solid #eeff01; /* 선명한 흰색 테두리 */
+  z-index: 53;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+
+.managing-right-popup  a
+{
+
+  color: #000000;
+  text-decoration: none;
+  right: 200px;
+  
+}
+
+.managing-right-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+
+
+.efficient-right-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(255, 255, 255),
+    
+    #edffeb);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  border: 2px solid #eeff01; /* 선명한 흰색 테두리 */
+  z-index: 53;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+.efficient-right-popup  a
+{
+
+  color: #000000;
+  text-decoration: none;
+  right: 200px;
+  
+}
+
+efficient-right-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+
+
+.socialActivity-right-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(255, 255, 255),
+    
+    #edffeb);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  border: 2px solid #02ff17; /* 선명한 흰색 테두리 */
+  z-index: 53;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+.socialActivity-right-popup  a
+{
+
+  color: #000000;
+  text-decoration: none;
+  right: 200px;
+  
+}
+
+.socialActivity-right-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+
+.forWomen-right-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;  
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(255, 255, 255),
+    
+    #edffeb);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 0 0;
+  border: 2px solid #02ff17; /* 선명한 흰색 테두리 */
+  z-index: 57;
+  display: none;
+  overflow-y: auto;
+
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+.forWomen-right-popup  a
+{
+
+  color: #000000;
+  text-decoration: none;
+  right: 200px;
+  
+}
+
+forWomen-right-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.business-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 0;
+ width: 10.5vw; /* 가로 꽉 채우기 */
+  height: auto; /* 세로 0% */
+  background-color: transparent;
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 15px 15px 15px 15px;
+  border: 2px solid #ff0202; /* 선명한 흰색 테두리 */
+  z-index: 50;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+.business-right-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(255, 255, 255),
+    
+    #edffeb);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 -4px 10px rgba(255, 145, 1, 0.3);
+  z-index: 50;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+.business-right-popup  a
+{
+
+  color: #000000;
+  text-decoration: none;
+  right: 200px;
+  
+}
+
+.business-right-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+
+
+
+
+.CEO-right-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+  height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(245, 243, 243),
+    
+    #f8f4f4);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  border: 2px solid #ff0202; /* 선명한 흰색 테두리 */
+  z-index: 53;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+.CEO-right-popup  a
+{
+
+  color: #000000;
+    text-decoration: none;
+    right: 200px;
+  
+}
+
+.CEO-right-popup.close-btn 
+{
+float: right;
+font-size: 20px;
+cursor: pointer;
+color: #666;
+margin-bottom: 10px;
+}
+
+.business-left-popup-menu 
+{
+  flex: 0 0 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+  margin-left: 220px;
+}
+
+.business-right-popup-content 
+{
+ flex: 1;
+  overflow-y: auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 내부 요소 가운데 정렬 */
+  text-align: center;  /* 텍스트 가운데 정렬 */
+  
+}
+
+.business-right.sidebar 
+{
+  float: left;
+  width: 200px; /* 메뉴 너비 */
+}
+
+
+
+.services-popup 
+{
+  position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 0;
+  width: 9.5vw; /* 가로 꽉 채우기 */
+  height: auto; /* 세로 0% */
+  background-color: rgba(116, 163, 97, 0.97);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 15px 15px 15px 15px;
+  box-shadow: 0 -4px 10px rgba(255, 145, 1, 0.3);
+  z-index: 50;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+.services-right-popup 
+{
+position: fixed;
+  top: 26vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 190px;
+  width: 84vw; /* 가로 꽉 채우기 */
+ height: 57.8vh; /* 세로 60% */
+  background: linear-gradient(to bottom,
+    rgb(245, 243, 243),
+    
+    #f8f4f4);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 10px 10px;
+  border: 2px solid #ff6702; /* 선명한 흰색 테두리 */
+  z-index: 53;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+
+
+
+ .company-popup 
+{
+  position: fixed;
+  top: 40vh;  /* 화면 상단에서 40% 아래부터 시작 */
+  left: 0;
+  width: 100vw; /* 가로 꽉 채우기 */
+  height: 60vh; /* 세로 60% */
+  background-color: rgba(247, 230, 204, 0.97);
+  padding: 25px 40px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+  box-sizing: border-box;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 -4px 10px rgba(255, 145, 1, 0.3);
+  z-index: 50;
+  display: none;
+  overflow-y: auto;
+  /*transform: none;  좌우 가운데 맞춤 해제 */
+}
+
+.company-text 
+{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.company-image img 
+{
+   width: 20000px;
+   height: 100%;
+  border-radius: 10px;
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+}
+
+.company-big-image img 
+{
+
+   width: 200%;
+   height: 100%;
+  border-radius: 10px;
+  padding: 25px 20px; /* 좌우 약간 패딩은 유지해도 되고 없애도 됨 */
+}
+
+
+.company-info-wrapper 
+{
+  display: flex;
+  flex-direction: row; /* 좌우 배치 */
+  align-items: flex-start;
+  gap: 30px;
+  padding:   0;
+  margin:   0;
+  
+}
+
+.business-popup.close-btn 
+{
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.business-popup .close-btn:hover 
+{
+  color: #000;
+}
+
+.business-popup h2 
+{
+  margin-bottom: 15px;
+}
+
+.business-table 
+{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.business-table th,
+.business-table td 
+{
+  border: 1px solid #ccc;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.business-table th 
+{
+  background-color: #f0f0f0;
+}
+
+.cobalt-btn 
+{
+  background-color: #ff8410;  /*sign up for button*/
+  color: rgb(255, 190, 51);
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cobalt-btn:hover 
+{
+  background-color: #003a90;
+}
+
+.image-with-caption img {
+  /*  top: 50vh; 화면 상단에서 40% 아래부터 시작 */
+  width: 300px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(206, 75, 75, 0.4);
+  transition: transform 0.3s;
+}
+
+
+
+
+.image-with-caption img:hover {
+  transform: scale(1.05);
+}
+
+
+
+.bis-image-with-caption img {
+  /*  top: 50vh; 화면 상단에서 40% 아래부터 시작 */
+  width: 200px;
+
+  transition: transform 0.3s;
+}
+
+
+
+
+.bis-image-with-caption img:hover {
+  transform: scale(1.05);
+}
+
+.bis-image-with-caption img {
+  /*  top: 50vh; 화면 상단에서 40% 아래부터 시작 */
+  width: 200px;
+
+  transition: transform 0.3s;
+}
+
+.history-image-with-caption img {
+  /*  top: 50vh; 화면 상단에서 40% 아래부터 시작 */
+  width: 1200px;
+
+  transition: transform 0.3s;
+}
+
+
+
+
+.caption {
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 12px 16px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  width: 300px;
+  font-size: 14px;
+  color: #333;
+}
+
+
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 50px;   /* 전체를 오른쪽으로 이동 */
+}
+.image-box {
+  margin-left: 50px;   /* 이미지만 추가로 오른쪽 이동 */
+}
+
+
+.bus-image-box {
+  margin-left: 100px;   /* 이미지만 추가로 오른쪽 이동 */
+}
+
+ .bus-image-box img {
+    width: 200px;   /* 원하는 크기 */
+    height: auto;  /* 비율 유지 */
+  }
+  
+.horizontal-text {
+  margin-left: 50px;   /* 가로글만 추가로 오른쪽 이동 */
+ 
+}
+
+
+.submenu {
+  max-height: 0;           /* 처음엔 높이 0 */
+  overflow: hidden;        /* 내용 안 보이게 */
+  opacity: 0;              /* 투명 */
+  transition: all 0.5s ease; /* 애니메이션 효과 */
+}
+
+/* 서브메뉴 펼침 상태 */
+.submenu.open {
+  max-height: 300px;       /* 충분히 큰 값 (내용보다 크면 됨) */
+  opacity: 1;
+}
+.main-menu li {
+    position: relative; /* 하위 메뉴 위치 기준 */
+}
+
+.main-menu li a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.main-menu li:hover > a {
+    background-color: #da9292;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999999;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-overlay.show {
+  display: flex; /* 모달을 flex로 표시함 */
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+}
+
+.CEO-right-popup.show {
+  animation: slideUp 0.5s ease-out forwards;
+}
+.CEO-right-popup.hide {
+  animation: slideDownOut 0.5s ease-in forwards;
+}
+
+
+
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: #f5f5f5;
+  padding: 20px;
+}
+
+.footer-inner {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.footer-logo img {
+  width: 160px;
+  height: 60px;
+  opacity: 0.9;
+}
+
+.footer-info p {
+  margin: 3px 0;
+  line-height: 1.6;
+}
+
+
+.footer-info {
+  display: flex;
+  gap: 40px; /* 두 열 사이 공간 */
+}
+
+.footer-col p {
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+.footer-logo img {
+  width: 120px;
+  vertical-align: middle;
+}
+.slide-image {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -400px;   /* 처음엔 화면 밖(우측) */
+  transition: right 0.6s ease-out; /* 슬라이드 애니메이션 */
+}
+
+.slide-image img {
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+}
+
+
+
+
+
+
+ svg {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+    }
+
+    .bar {
+      fill: var(--bar-color, #999);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease;
+    }
+    .bar.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .point {
+      fill: var(--point-color, #FF8000);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .point.show {
+      opacity: 1;
+    }
+
+    .val-label {
+      font-size: 12px;
+      fill: var(--label-color, #333);
+      opacity: 0;
+      transition: opacity 0.3s;
+      
+    }
+    .val-label.show {
+      opacity: 1;
+    }
+
+    .connect-line {
+      fill: none;
+      stroke: var(--line-color, #FF8000);
+      stroke-width: 2;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      transition: stroke-dashoffset 1.5s ease;
+    }
+
+    .final-label {
+      font-size: 14px;
+      fill: var(--line-color, #FF8000);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .y-label, .x-label {
+      font-size: 12px;
+      fill: #666;
+    }
+
+    .y-grid-line {
+      stroke: var(--grid-color, #ddd);
+      stroke-width: 1;
+      stroke-dasharray: 4 4;
+    }
+
+
+
+
+
+  </style>
+</head>
+<body>
+
+<a href="#"
+  class="next-button">
+NEXT
+</a>
+
+
+   <!-- 햄버거 버튼 (모바일 전용) -->
+
+
+<!-- 모바일 슬라이드 메뉴 -->
+<div class="mobile-slide-menu" id="mobileSlideMenu">
+  <span class="close-btn" id="mobileCloseBtn">&times;</span>
+  <!--<a href="#">홈</a>-->
+  <a href="#">회사소개(M)</a>
+<ul class="main-menu">
+    <li class="has-submenu">
+        
+        <ul class="submenu">
+            <li><a href="#">사업분야(M)</a></li>
+            <li><a href="#">대표님 인사말(M)</a></li>
+        </ul>
+        <a href="#">회사정보(M)</a>
+        <ul class="submenu">
+            <li><a href="#">사업분야(M)</a></li>
+            <li><a href="#">대표님 인사말(M)</a></li>
+        </ul>
+    </li>
+    <li><a href="#">서비스 소개</a></li>
+         <ul class="submenu">
+        
+      <div class="mobile-slide-sub-menu" id="mobileSlideSubMenu">
+        <li><a href="#">기업고객용(M)</a></li>
+        <li><a href="#">개인고객용(M)</a></li>
+        </div>
+      </ul>
+      
+  <!-- <a href="#">전문 인력관리 시스템</a>-->
+  <!--<a href="#">사회 친화적 활동</a>-->
+  <a href="#" id="recruitMenuMobile"></a>
+</div>
+
+  <!-- 동영상 배경 -->
+  <video class="bg-video" autoplay muted loop playsinline>
+    <!--<source src="https://cdn.pixabay.com/video/2016/08/31/4854-180863259_large.mp4" type="video/mp4">-->
+    <!--<source src="https://cdn.pixabay.com/video/2025/04/29/275722_large.mp4" type="video/mp4">-->
+    <!--<source src="https://videos.pexels.com/video-files/4253333/4253333-uhd_1440_2732_25fps.mp4" type="video/mp4">-->
+    <!--<source src="https://videocdn.cdnpk.net/videos/b880523d-74ea-4c04-985d-fa6356c5e7c8/horizontal/previews/watermarked/large.mp4" type="video/mp4">-->
+    <source src="https://media.istockphoto.com/id/497375361/ko/%EB%B9%84%EB%94%94%EC%98%A4/%EC%8A%88%ED%8D%BC-%EA%B5%AC%EC%8A%AC%EB%88%88%EA%BC%AC%EB%A6%AC-%EB%B0%8F-%EB%94%B8%EC%9D%B4%EB%8B%A4-%EC%8B%A4%ED%96%89-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%9D%BC.mp4?s=mp4-640x640-is&k=20&c=K8vTeedak_NQu7xoDG6zYrvYJmisJV0Om0owM0oKt5M=">
+    <!--<source src="https://media.istockphoto.com/id/1231862488/ko/%EB%B9%84%EB%94%94%EC%98%A4/%ED%8E%B8%EC%95%88%ED%95%A8%EC%9D%84-%EC%A3%BC%EB%8A%94-%EC%BC%80%EC%96%B4%EC%9D%98-%EC%A2%85%EB%A5%98.mp4?s=mp4-640x640-is&k=20&c=_05EIG6joDCVOarpU796Vr3Q-My0y4fzT1gqOkaqRnw=" type="video/mp4">-->
+
+    브라우저가 video 태그를 지원하지 않습니다.
+  </video>
+
+  <!-- 내비게이션 -->
+   <!-- 햄버거 버튼 -->
+<div class="mobile-menu-btn" id="mobileMenuBtn">
+  <img src="https://github.com/LJ555-c/image-hosting/blob/main/image5_transparent.png?raw=true" alt="메뉴" />
+</div>
+
+
+
+<!-- 오버레이 배경 추가 -->
+
+<div id="overlay" class="hidden"></div>
+  <nav>
+  <div class="menu-bar">
+  <!--<a href="#">따뜻한 사람들</a>-->
+  <a href="#" onclick="location.reload()">
+    <img src="https://github.com/LJ555-c/image-hosting/blob/main/image5_transparent.png?raw=true" 
+    alt="로고"  vertical-align: middle;>
+  </a>
+  <a href="#">회사소개p</a>
+  <a href="#">서비스 소개p</a>
+  <a href="#">전문 관리 시스템p</a>
+  <a href="#">사회적 활동p</a>
+  <a href="https://www.youtube.com/@%EB%94%B0%EB%9C%BB%ED%95%9C%EC%82%AC%EB%9E%8C%EB%93%A4-u8u" target="_blank" class="youtube-btn">
+  <svg 
+  width="30" height="30"   
+  viewBox="0 0 24 24"
+  fill="gray"            
+  xmlns="http://www.w3.org/2000/svg">
+  <path d="M23.498 6.186a2.974 2.974 0 00-2.092-2.104C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.406.582A2.974 2.974 0 00.502 6.186 31.533 31.533 0 000 12a31.533 31.533 0 00.502 5.814 2.974 2.974 0 002.092 2.104C4.495 20.5 12 20.5 12 20.5s7.505 0 9.406-.582a2.974 2.974 0 002.092-2.104A31.533 31.533 0 0024 12a31.533 31.533 0 00-.502-5.814zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/>
+  </svg>
+  </a>
+</div>
+
+
+
+  <!-- 모든 메뉴에 대한 하위 메뉴 묶음 메인메뉴 20250922-->
+  <div class="dropdown-group">
+    <div class="dropdown-section">
+       <a href="#" id="businessPartLeftSubMenu">사업분야</a>
+       <a href="#" id="CEOPartLeftSubMenu">대표님 인사말P</a>
+       <a href="#" id="companyInforLeftSubMenu">기업정보in</a>
+       <a href="#" id="customersInforSubMenu">고객사where</a>
+    </div>
+    <div class="dropdown-section">
+      <a href="#" id="companyCustomersPartSubMenu">기업고객용ppp</a>
+      <a href="#" id=" "></a>
+       <a href="#" id=" "></a>
+       <a href="#" id=" "></a>
+  
+    </div>
+    <div class="dropdown-section">
+      <a href="#" id="law_and_ManagingLeftPartSubMenu">법률 및 규정 준수s  </a>
+      <a href="#" id="Managing_EfficientlyPartLeftSubMenu">효율적인 운영 관리1111  </a>
+    </div>
+    <div class="dropdown-section">
+      <a href="#" id="socialActivityLeftPartSubMenu">사회 활동sss</a>
+      <a href="#" id="forWomenPartLeftSubMenu">여성 기업 인증www</a>
+    </div>
+    </div>
+  </div>
+</nav>
+
+  <!-- warmhearted 텍스트 -->
+<div class="warmhearted-text">Professional & Efficient Workforce Matching</div>  
+<div class="warmheartedSub-text">전문적이고 효율적인 인재 매칭 서비스</div>  
+
+<!-- 이미지 전면 표시 -->
+
+
+
+
+  <!-- 이미지 전면 표시 -->
+<div class="image-with-caption">
+  <!-- 상단 이미지 3개 (슬라이드 or 고정) -->
+<div class="slider-container top-slider">
+  <div class="image-with-caption">
+    <!--<img src="https://img.pikbest.com/photo/20250717/morning-coffee-on-a-rainy-day_11795880.jpg!bwr800" alt="이미지1"> -->
+    <!--<img src="https://raw.githubusercontent.com/LJ555-c/image-hosting/main/image1.png" alt="이미지1">-->
+
+    <img src="images/colabor.png" alt="이미지1">
+    <div class="caption">
+            <h3>함께 하는 기업</h3>
+      <p>인재 매칭 서비스의 전문성을 바탕으로</p>
+      <p>기업과 인재간의 최적의 연결을 제공합니다.</p>
+    </div>
+  </div>
+
+  <div class="image-with-caption">
+    <img src="https://raw.githubusercontent.com/LJ555-c/image-hosting/main/image2.png" alt="이미지2">
+    <div class="caption">
+      <h3>글로벌 기업 기아 오토랜드</h3>
+      <p>화성, 광명, 광주</p>
+      <p>전문 인력 파견</p>
+    </div>
+  </div>
+
+  <div class="image-with-caption">
+<img src="images/speciallist.png" alt="이미지3">
+    <div class="caption">
+      <h3>전문가들의 체계적인 관리 시스템</h3>
+      <p>법무 법인, 노무 법인</p>
+      <p>연계 및 근로 감독관 출신 인력 지원</p>
+    </div>
+  </div>
+
+  <div class="image-with-caption">
+    <img  id ="recruitImage"src="https://raw.githubusercontent.com/LJ555-c/image-hosting/main/image4.png" alt="image4">
+    <div class="caption">
+      <h3>채용문의</h3>
+      <p>전화번호: 010-9999-0000</p>
+      <p>이메일: young0504@warmheart.kr</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+  
+
+    <!-- 회사정보 팝업 -->
+<div id="businessLeftPopup" class="business-popup">
+   <span class="close-btn" id="closebusinessBtn">&times;
+
+   </span>
+    
+     <div class="normal-slide-sub-menu">
+    
+        <a href="#" id="businessPartRightPopup">사업 파트</a>
+        <a href="#" id="CEORightPopup">대표님 인사 파트</a>
+     </div>   
+
+    </div>
+</div>
+  
+
+<div id="customersLeftPopup" class="customer-popup">
+   <span class="close-btn" id="closecustomerBtn">&times;
+
+   </span>
+    
+     <div class="normal-slide-sub-menu">
+        <a href="#" id="customerPartPartRightPopup">기업고객용 cc</a>
+     </div>   
+
+    </div>
+</div>
+
+
+<div id="managersLeftPopup" class="manager-popup">
+   <span class="close-btn" id="closemanagerBtn">&times;
+
+   </span>
+    
+     <div class="normal-slide-sub-menu">
+        <a href="#" id="Law_PartRightPopup">법률 및 규정 준수sst</a>
+        <a href="#" id="Efficient_PartRightPopup">효율적인 운영 관리sst</a>
+     </div>   
+</div>
+
+
+
+
+<div id="socialLeftPopup" class="social-popup">
+   <span class="close-btn" id="closesocialBtn">&times;
+
+   </span>
+    
+     <div class="normal-slide-sub-menu">
+        <a href="#" id="law_and_ManagingLeftPartSubMenu">법률 및 규정 준수sst</a>
+        <a href="#" id="Efficient_PartRightPopup">효율적인 운영 관리sst</a>
+     </div>   
+</div>
+
+
+
+
+    <!-- 회사정보 팝업 -->
+<div id="businessrightPopupSR" class="business-right-popup"><span class="close-btn" id="closebusinesspageBtn">&times;</span>
+  <div class="content-wrapper">
+    <!-- 세로글 -->
+    <div class="vertical-text-busniess">
+      <a href="#">BUSINESS PART FROM COMPANY</a>
+    </div>
+
+    <div class="message-box">
+      <a href="#">
+      <div class="horizontal-text">
+        </a>
+        <a href="#">
+          <div class="text-table ">
+            <div>
+              <p><strong><span style="font-size: 40px;">전문적이고 효율적인</span></strong></p>
+            </div>
+            <div>
+              <p><strong><span style="font-size: 40px; color: rgb(255, 128, 0);">인재매칭서비스</span></strong></p></span>
+            </div>
+          </div>
+          <div>
+            <p><strong><span style="font-size: 20px;">맞춤형 인재 매칭 서비스로 단체급식 업계의
+            인력난 해소와 경쟁력 강화에 기여합니다.</span></strong></p>
+            <p></p>
+          </div>
+          <br>
+          
+
+          <!-- 이미지 전면 표시 -->
+        <div class="bis-image-with-caption">
+          <!-- 상단 이미지 3개 (슬라이드 or 고정) -->
+          <div class="bis-slider-container top-slider">
+            <div class="bis-image-with-caption">
+              
+              <img src="images/bis1.png" alt="이미지1">
+              <div class="bis-image-with-caption">
+                <p>전문 인력 확보</p>
+                <p>어려움 해소</p>
+              </div>
+            </div>
+
+            <div class="bis-image-with-caption">
+              <img src="images/bis2.png" alt="이미지2">
+               <div class="bis-image-with-caption">
+                <p>채용 절감 및</p>
+                <p>시간 절감</p>
+              </div>
+            </div>
+
+            <div class="bis-image-with-caption">
+             <img src="images/bis3.png" alt="이미지3">
+             <div class="bis-image-with-caption">
+                <p>법규 준수</p>
+                <p>리스트 관리</p>
+              </div>
+            </div>
+
+            <div class="bis-image-with-caption">
+              <img src="images/bis4.png" alt="이미지4">
+              <div class="bis-image-with-caption">
+                <p>객관적 평가와</p>
+                <p>선발 가능</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; margin-top:0; padding-top:0;">
+            <div style="flex:1; background:transparent; margin-top:0; padding-top:0;">
+                <div class="text-table">
+                  <p>
+                    <strong><span style="font-size: 18px;">
+                      <span style="color: #FF8000;">*&nbsp;</span>채용대행</span>
+                    </span></strong>
+                  </p>
+                  <div class="line_box holder" style="width:20%; margin-left: 0;"><!-- HR Line -->
+                    <hr style="border-top-width:2px; border-color:rgba(0, 0, 0, 0.05);" />
+                  </div>
+                  <div class="text-table">
+                    <p>
+                      <strong><span style="font-size: 18px;">
+                        <span style="color: #FF8000;">01&nbsp;</span>근로자<span style="color: #FF8000;">&nbsp;ㅣ&nbsp;</span>
+                        </span></strong>
+                      <span style="font-size: 18px;">최종적으로 의뢰 기업 소속</span>
+                    </p>
+                  </div>
+                  <div class="line_box holder" style="width:20%; margin-left: 0;"><!-- HR Line -->
+                    <hr style="border-top-width:2px; border-color:rgba(0, 0, 0, 0.05);" />
+                  </div>
+                <div class="text-table">
+                  <p>
+                    <strong><span style="font-size: 18px;">
+                      <span style="color: #FF8000;">01&nbsp;</span>업무<span style="color: #FF8000;">&nbsp;ㅣ&nbsp;</span>
+                      </span></strong>
+                    <span style="font-size: 18px;">채용 프로세스에 대한 국한</span>
+                  </p>
+                </div>
+
+
+                <div class="line_box holder" style="width:20%; margin-left: 0;"><!-- HR Line -->
+                  <hr style="border-top-width:2px; border-color:rgba(0, 0, 0, 0.05);" />
+                </div>
+
+                <div class="text-table">
+                  <p>
+                    <strong><span style="font-size: 18px;">
+                      <span style="color: #FF8000;">01&nbsp;</span>계약<span style="color: #FF8000;">&nbsp;ㅣ&nbsp;</span>
+                      </span></strong>
+                    <span style="font-size: 18px;">단기적, 프로젝트 개방</span>
+                  </p>
+                </div>
+                
+                <div class="line_box holder" style="width:20%; margin-left: 0;"><!-- HR Line -->
+                  <hr style="border-top-width:2px; border-color:rgba(0, 0, 0, 0.05);" />
+                </div>
+
+                <div class="text-table">
+                  <p>
+                    <strong><span style="font-size: 18px;">
+                      <span style="color: #FF8000;">01&nbsp;</span>목적<span style="color: #FF8000;">&nbsp;ㅣ&nbsp;</span>
+                      </span></strong>
+                    <span style="font-size: 18px;">전문적인 인재 확보 지원</span>
+                  </p>
+                </div>
+              </div>
+          </div>
+            
+          <div style="flex:1; background:transparent; margin-top:0; padding-top:0;">
+            <div class="text-table">
+              <p>
+                <strong><span style="font-size: 18px;">
+                  <span style="color: #FF8000;">*&nbsp;</span>아웃소싱</span>
+                </span></strong>
+              </p>
+              <div class="line_box holder" style="width:20%; margin-left: 0;"><!-- HR Line -->
+                <hr style="border-top-width:2px; border-color:rgba(0, 0, 0, 0.05);" />
+              </div>
+
+              <div class="text-table">
+                <p>
+                  <strong><span style="font-size: 18px;">
+                    <span style="color: #FF8000;">01&nbsp;</span>근로자<span style="color: #FF8000;">&nbsp;ㅣ&nbsp;</span>
+                    </span></strong>
+                  <span style="font-size: 18px;">최종적으로 의뢰 기업 소속</span>
+                </p>
+              </div>
+
+
+              <div class="line_box holder" style="width:20%; margin-left: 0;">
+                <hr style="border-top-width:2px; border-color:rgba(0, 0, 0, 0.05);" />
+              </div>
+
+              <div class="text-table">
+                <p>
+                  <strong><span style="font-size: 18px;">
+                    <span style="color: #FF8000;">01&nbsp;</span>업무<span style="color: #FF8000;">&nbsp;ㅣ&nbsp;</span>
+                    </span></strong>
+                  <span style="font-size: 18px;">채용 프로세스에 대한 국한</span>
+                </p>
+              </div>
+              
+              <div class="line_box holder" style="width:20%; margin-left: 0;">
+                <hr style="border-top-width:2px; border-color:rgba(0, 0, 0, 0.05);" />
+              </div>
+
+              <div class="text-table">
+                <p>
+                  <strong><span style="font-size: 18px;">
+                    <span style="color: #FF8000;">01&nbsp;</span>계약<span style="color: #FF8000;">&nbsp;ㅣ&nbsp;</span>
+                    </span></strong>
+                  <span style="font-size: 18px;">단기적, 프로젝트 개방</span>
+                </p>
+              </div>
+              
+              <div class="line_box holder" style="width:20%; margin-left: 0;">
+                <hr style="border-top-width:2px; border-color:rgba(0, 0, 0, 0.05);" />
+              </div>
+
+              <div class="text-table">
+                <p>
+                  <strong><span style="font-size: 18px;">
+                    <span style="color: #FF8000;">01&nbsp;</span>목적<span style="color: #FF8000;">&nbsp;ㅣ&nbsp;</span>
+                    </span></strong>
+                  <span style="font-size: 18px;">전문적인 인재 확보 지원</span>
+                </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+
+
+
+
+<div id="headinformationPopupSR" class="head-right-popup"><span class="close-btn" id="closeheadpageBtn">&times;</span>
+  <div class="content-wrapper">
+    <!-- 세로글 -->
+    <div class="vertical-text-busniess">
+      <a href="#">BUSINESS PART FROM COMPANY</a>
+    </div>
+
+      <title>그래프 템플릿</title>
+          <style>
+            svg {
+              width: 100%;
+              max-width: 800px;
+              height: auto;
+            }
+
+            .bar {
+              fill: var(--bar-color, #999);
+              opacity: 0;
+              transform: translateY(20px);
+              transition: all 0.4s ease;
+            }
+            .bar.show {
+              opacity: 1;
+              transform: translateY(0);
+            }
+
+            .point {
+              fill: var(--point-color, #FF8000);
+              opacity: 0;
+              transition: opacity 0.3s ease;
+            }
+            .point.show {
+              opacity: 1;
+            }
+
+            .val-label {
+              font-size: 12px;
+              fill: var(--label-color, #333);
+              opacity: 0;
+              transition: opacity 0.3s;
+            }
+            .val-label.show {
+              opacity: 1;
+            }
+
+            .connect-line {
+              fill: none;
+              stroke: var(--line-color, #FF8000);
+              stroke-width: 3;
+              stroke-dasharray: 1000;
+              stroke-dashoffset: 1000;
+              transition: stroke-dashoffset 1.5s ease;
+            }
+
+            .final-label {
+              font-size: 14px;
+              fill: var(--line-color, #FF8000);
+              opacity: 0;
+              transition: opacity 0.6s ease;
+            }
+
+            .y-label, .x-label {
+              font-size: 12px;
+              fill: #666;
+            }
+
+            .y-grid-line {
+              stroke: var(--grid-color, #f8d71d);
+              stroke-width: 1;
+              stroke-dasharray: 4 4;
+            }
+          </style>
+        </head>
+         
+
+            <div class="bis-image-with-caption">
+          <!-- 상단 이미지 3개 (슬라이드 or 고정) -->
+          <div class="message-box">
+            <a href="#">
+            <div class="horizontal-text">
+              </a>
+              <a href="#">
+                 <body>
+            <svg id="chart" viewBox="0 0 360 300">
+              <g id="y-grid"></g>
+              <g id="plot"></g>
+            </svg>
+
+            <script>
+              (function(){
+                const svg = document.getElementById("chart");
+                const yGrid = svg.querySelector("#y-grid");
+                const plot = svg.querySelector("#plot");
+
+                // 데이터 (맞춰서 바꿔)
+                const labels = ["2018","2019","2020","2021","2022","2023"];
+                const values = [10, 20, 35, 50, 70, 120];
+                const maxY = 120;
+
+                const width = 360;
+                const height = 240;
+                const gap = 15;
+                const barWidth = (width - gap * (labels.length + 1)) / labels.length;
+                const bottomMargin = 20;
+
+                // Y축 + 그리드 그리기
+                function drawY() {
+                  const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+
+                  // Y축
+                  const yAxis = document.createElementNS("http://www.w3.org/2000/svg","line");
+                  yAxis.setAttribute("x1", 0);
+                  yAxis.setAttribute("y1", 0);
+                  yAxis.setAttribute("x2", 0);
+                  yAxis.setAttribute("y2", height - bottomMargin);
+                  yAxis.setAttribute("stroke", "var(--grid-color, #ddd)");
+                  yAxis.setAttribute("stroke-width", "1.5");
+                  g.appendChild(yAxis);
+
+                  // 그리드 + 레이블
+                  const steps = 5;
+                  for (let i = 1; i <= steps; i++) {
+                    const v = (maxY / steps) * i;
+                    const y = (height - bottomMargin) - (v / maxY) * (height - bottomMargin);
+
+                    const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+                    line.setAttribute("x1", 0);
+                    line.setAttribute("y1", y);
+                    line.setAttribute("x2", width);
+                    line.setAttribute("y2", y);
+                    line.setAttribute("class", "y-grid-line");
+                    g.appendChild(line);
+
+                    const label = document.createElementNS("http://www.w3.org/2000/svg","text");
+                    label.setAttribute("x", -5);
+                    label.setAttribute("y", y + 4);
+                    label.setAttribute("class", "y-label");
+                    label.textContent = v;
+                    g.appendChild(label);
+                  }
+
+                  yGrid.appendChild(g);
+                }
+
+                // 막대 + 선 + 포인트 + 라벨 생성
+                function drawPlot() {
+                  const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+                  plot.appendChild(g);
+
+                  const bars = [];
+                  const points = [];
+
+                  labels.forEach((lbl, i) => {
+                    const x = gap + i * (barWidth + gap);
+                    const val = values[i];
+                    const barHeight = (val / maxY) * (height - bottomMargin);
+                    const y = (height - bottomMargin) - barHeight;
+
+                    // 막대
+                    const rect = document.createElementNS("http://www.w3.org/2000/svg","rect");
+                    rect.setAttribute("x", x);
+                    rect.setAttribute("y", y);
+                    rect.setAttribute("width", barWidth);
+                    rect.setAttribute("height", barHeight);
+                    rect.setAttribute("class", "bar");
+                    g.appendChild(rect);
+                    bars.push(rect);
+
+                    // 포인트
+                    const cx = x + barWidth / 2;
+                    const cy = y;
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg","circle");
+                    circle.setAttribute("cx", cx);
+                    circle.setAttribute("cy", cy);
+                    circle.setAttribute("r", 4);
+                    circle.setAttribute("class", "point");
+                    g.appendChild(circle);
+                    points.push({ cx, cy, el: circle });
+
+                    // 값 라벨
+                    const valLbl = document.createElementNS("http://www.w3.org/2000/svg","text");
+                    valLbl.setAttribute("x", cx);
+                    valLbl.setAttribute("y", cy - 8);
+                    valLbl.setAttribute("class", "val-label");
+                    valLbl.textContent = val;
+                    g.appendChild(valLbl);
+
+                    // x축 라벨
+                    const xLbl = document.createElementNS("http://www.w3.org/2000-svg","text");
+                    xLbl.setAttribute("x", cx);
+                    xLbl.setAttribute("y", height - bottomMargin + 15);
+                    xLbl.setAttribute("class", "x-label");
+                    xLbl.textContent = lbl;
+                    g.appendChild(xLbl);
+                  });
+
+                  // 선 연결
+                  const poly = document.createElementNS("http://www.w3.org/2000/svg","polyline");
+                  poly.setAttribute("class", "connect-line");
+                  const pts = points.map(p => `${p.cx},${p.cy}`).join(" ");
+                  poly.setAttribute("points", pts);
+                  g.appendChild(poly);
+
+                  // 마지막 값 라벨
+                  const last = points[points.length - 1];
+                  const finalLbl = document.createElementNS("http://www.w3.org/2000/svg","text");
+                  finalLbl.setAttribute("x", last.cx);
+                  finalLbl.setAttribute("y", last.cy - 25);
+                  finalLbl.setAttribute("class", "final-label");
+                  finalLbl.textContent = values[values.length - 1] + " 단위";
+                  g.appendChild(finalLbl);
+
+                  // 애니메이션
+                  setTimeout(() => {
+                    bars.forEach((bar, idx) => {
+                      setTimeout(() => bar.classList.add("show"), idx * 200);
+                    });
+                    points.forEach((pt, idx) => {
+                      setTimeout(() => {
+                        pt.el.classList.add("show");
+                        // 대응하는 값 라벨
+                        const lbl = g.querySelectorAll(".val-label")[idx];
+                        lbl.classList.add("show");
+                      }, bars.length * 200 + idx * 150);
+                    });
+
+                    setTimeout(() => {
+                      poly.style.strokeDashoffset = "0";
+                    }, bars.length * 200 + points.length * 150 + 300);
+
+                    setTimeout(() => {
+                      finalLbl.style.opacity = 1;
+                    }, bars.length * 200 + points.length * 150 + 900);
+                  }, 500);
+                }
+
+                drawY();
+                drawPlot();
+
+              })();
+
+
+              
+            </script>
+            <br>
+              
+                
+                
+
+                <!-- 이미지 전면 표시 -->
+              <div class="bis-image-with-caption">
+                <!-- 상단 이미지 3개 (슬라이드 or 고정) -->
+                <div class="bis-slider-container top-slider">
+                  <div class="bis-image-with-caption">
+                    
+                    <img src="images/2017.png" alt="이미지1">
+                    
+                  </div>
+
+                  <div class="bis-image-with-caption">
+                    <img src="images/2018.png" alt="이미지2">
+                    
+                  </div>
+
+                  <div class="bis-image-with-caption">
+                  <img src="images/2019.png" alt="이미지3">
+                 
+                  </div>
+
+                  <div class="bis-image-with-caption">
+                    <img src="images/2019.png" alt="이미지4">
+                    
+                  </div>
+                </div>
+                <br>
+
+
+               <div class="history-image-with-caption img">
+                    
+                    <img src="images/history.png" alt="이미지1">
+                   
+                  </div>
+
+
+                <div class="his-slider-container top-slider">
+                  <div class="bis-image-with-caption">
+                    
+                    <img src="images/2021.png" alt="이미지1">
+                    
+                  </div>
+
+                  <div class="bis-image-with-caption">
+                    <img src="images/2022.png" alt="이미지2">
+                    
+                  </div>
+
+                  <div class="bis-image-with-caption">
+                  <img src="images/2023.png" alt="이미지3">
+                
+                  </div>
+
+                  <div class="bis-image-with-caption">
+                    <img src="images/2024.png" alt="이미지4">
+                   
+                  </div>
+                </div>
+            </div>
+          </div>
+          </body>
+        </html>`  
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+    <!-- 이미지 + 텍스트 박스 1 -->
+
+
+
+
+  
+    <!-- 대표님 인사말 -->
+  
+<div id="CEORightPopupSR" class="CEO-right-popup">
+  <span class="close-btn" id="closeCEOpageBtn">&times;</span>
+  <div class="content-wrapper">
+    <!-- 세로글 -->
+    <div class="vertical-text-CEO">
+      <a href="#">LEADER IN THE COMPANY</a>
+    </div>
+      <div class="message-box">
+        <a href="#">
+        <div class="horizontal-text">
+          <div class="text-table ">
+            <div>
+              <p style="text-align: left;">
+              <strong>
+                <span style="font-size: 18px;">  따뜻한 사람들</span></strong></p><p style="text-align: left;">
+                  <span style="font-size: 30px;color: rgb(255, 128, 0);">  CEO 인사말</span></strong></p><p style="text-align: left;"></p>
+                <img id="image-box" src="images/CEO.png"  alt="" />
+                <span style="font-size: 30px; color: rgb(255, 128, 0);">
+                  </span>        
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a href="#">
+    <div class="text-table "><div>
+      <p style="text-align: left;">
+        <span style="font-size: 20px;">안녕하십니까.</span></p><p style="text-align: left;">
+          <span style="font-size: 20px;"><strong>(주)따뜻한사람들</strong>과 <strong>(주)희망HR</strong> 대표이사를 맡고 있는 <strong>길리나 대표</strong>입니다.</span></p>
+          
+          <p style="text-align: left;"><span style="font-size: 16px;"><br></span></p>
+          <p style="text-align: left;"><span style="font-size: 20px;">우리 회사는 지난 8년간 <strong>노동(勞動)의 가치</strong>를 존중하고 고객의 <strong>노사화합(勞使和合)</strong>에</span></p>
+          
+          <p style="text-align: left;"><span style="font-size: 20px;">도움이 되고자 신뢰를 바탕으로 하여</span><strong>정도경영(正道經營)</strong>에 힘쓰어 왔습니다.</p>
+          <p style="text-align: left;"><span style="font-size: 16px;"></span></p>
+          <p style="text-align: left;"><span style="font-size: 16px;"><br></span></p>
+          <p style="text-align: left;"><span style="font-size: 20px;">또한 지속적인 <strong>사회봉사(社會奉仕)&nbsp;</strong>참여를 통해 <strong>기업(企業)</strong>의 <strong>지역사회 공헌(地域社會 貢獻)</strong>의</span></p>
+          <p style="text-align: left;"><span style="font-size: 16px;"></span></p>
+          <p style="text-align: left;"><span style="font-size: 20px;">중요성을 몸소 실천하기 위해 노력하였습니다.</span></p>
+          <p style="text-align: left;"><span style="font-size: 16px;"><br></span></p>
+          <p style="text-align: left;"><span style="font-size: 20px;">앞으로도 우리 회사는 지금과 같이<strong><span style="color: rgb(255, 128, 0);"> 근로자 존중(勤勞者 尊重)</span></strong>, 신뢰를 바탕으로 한</span></p>
+          <p style="text-align: left;"><span style="font-size: 16px;"></span></p>
+          <p style="text-align: left;"><span style="font-size: 20px;"><strong><span style="color: rgb(255, 128, 0);">고객중심 경영(顧客中心 經營)</span></strong>, 노동법과 각종 법규 준수를 통한 <strong><span style="color: rgb(255, 128, 0);">정도경영(正道經營)</span></strong></span></p>
+          <p style="text-align: left;"><span style="font-size: 16px;"></span></p>
+          <p style="text-align: left;"><span style="font-size: 20px;">사회봉사를 통한 기업의&nbsp;<strong><span style="color: rgb(255, 128, 0);">지역사회</span></strong><span style="color: rgb(255, 128, 0);"><strong>공헌</strong></span><strong><span style="color: rgb(255, 128, 0);">(地域社會 貢獻)</span></strong>을&nbsp;통해 내외형적으로</span></p>
+          <p style="text-align: left;"><span style="font-size: 16px;"></span></p>
+          <p style="text-align: left;"><span style="font-size: 20px;">더 큰 회사가 되도록 노력하겠습니다.</span></p><p style="text-align: left;"><span style="font-size: 16px;"><br></span></p>
+          <p style="text-align: left;"><span style="font-size: 20px;">감사합니다.</span></p>
+          </div>
+        </div>
+          </a>
+          </a>
+     </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div id="servicesRightPopupSR" class="services-right-popup">
+  <span class="close-btn" id="closeCEOpageBtn">&times;</span>
+  <div class="content-wrapper">
+    <!-- 세로글 -->
+    <div class="vertical-text-CEO">
+      <a href="#">SERVICES IN THE COMPANY</a>
+    </div>
+      <div class="message-box">
+        <a href="#">
+        <div class="horizontal-text">
+          <div class="text-table ">
+            <div>
+              <p style="text-align: left;">
+              <strong>
+                <span style="font-size: 18px;">  따뜻한 사람들</span></strong></p><p style="text-align: left;">
+                  <span style="font-size: 30px;color: rgb(255, 128, 0);">  CEO 인사말</span></strong></p><p style="text-align: left;"></p>
+                <img id="image-box" src="images/CEO.png"  alt="" />
+                <span style="font-size: 30px; color: rgb(255, 128, 0);">
+                  </span>        
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a href="#">
+    <div class="text-table "><div>
+      <p style="text-align: left;">
+        <span style="font-size: 16px;">안녕하십니까.</span></p><p style="text-align: left;">
+          <span style="font-size: 16px;"><strong>(주)따뜻한사람들</strong>과 <strong>(주)희망HR</strong> 대표이사를</span></p>
+          <p style="text-align: left;"><span style="font-size: 16px;">맡고 있는 <strong>길리나 대표</strong>입니다.</span></p>
+          
+          </div>
+        </div>
+          </a>
+          </a>
+     </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- 기업 서비스 팝업 -->
+<div id="servicesRightPopupSR" class="services-right-popup">
+<span class="close-btn" id="closeservicespageBtn">&times;</span>
+  <div class="content-wrapper">
+    <!-- 세로글 -->
+    <div class="vertical-text-CEO">
+      <a href="#">SERVICES IN THE COMPANY</a>
+    </div>
+      <div class="message-box">
+        <a href="#">
+        <div class="horizontal-text">
+          <div class="text-table ">
+            <div>
+              <p style="text-align: left;">
+              <strong>
+                <span style="font-size: 18px;">  따뜻한 사람들</span></strong></p><p style="text-align: left;">
+                  <span style="font-size: 30px;color: rgb(255, 128, 0);">  CEO 인사말</span></strong></p><p style="text-align: left;"></p>
+                <img id="image-box" src="images/CEO.png"  alt="" />
+                <span style="font-size: 30px; color: rgb(255, 128, 0);">
+                  </span>        
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 법률 서비스 팝업 -->
+<div id="lawRightPopupSR" class="managing-right-popup">
+<span class="close-btn" id="closemanagingpageBtn">&times;</span>
+  <div class="content-wrapper">
+  <!-- 세로글 -->
+    <div class="vertical-text-busniess">
+    <a href="#">LAW PART FROM COMPANY</a>
+    </div>
+    <div class="message-box">
+      <a href="#">
+      <div class="horizontal-text">
+      "채용대행"
+      </div>
+      </a>
+      <a href="#">
+      <div class="text-table ">
+        <div>
+        <p><strong><span style="font-size: 30px;">전문적이고 효율적인</span></strong></p>
+        </div>
+      <div>
+      <p><strong><span style="font-size: 30px; color: rgb(255, 128, 0);">인재매칭서비스</span></strong></p></span>
+      </div>
+
+      <div><p><strong><span style="font-size: 10px;">맞춤형 인재 매칭 서비스로 단체급식 업계의
+      인력난 해소와 경쟁력 강화에 기여합니다.</span></strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="companyLeftPopup" class="business-popup">
+   <span class="close-btn" id="closebusinessBtn">&times;
+
+   </span>
+    
+     <div class="normal-slide-sub-menu">
+        <a href="#" id="customerPartPartRightPopup">기업고객용 pppp</a>
+     </div>   
+
+    </div>
+</div>
+
+
+<div id="efficientRightPopupSR" class="efficient-right-popup">
+  <span class="close-btn" id="closeefficientpageBtn">&times;</span>
+
+  <div class="content-wrapper">
+
+    <div class="vertical-text-CEO">
+      <a href="#">EFFICIENT IN THE COMPANY</a>
+    </div>
+
+    <!-- 섹션 타이틀 -->
+    <div class="section-title">
+     <p> <h1 style="color: #ff8000;">체계적인 관리 시스템 도입</h1></p>
+      <p>구인부터 계약, 관리까지.</p>
+    </div>
+
+    <hr style="border-top:5px solid #ff8000; width:80%;">
+
+      <div class="steps-container">
+  <!-- 구인 -->
+      <div class="step">
+        <h2><span style="color:#ff8000;">01</span> 구인</h2>
+        <p>업장 상황에 맞게 지점 배치된 관리자를 통해 구인</p>
+        <div class="image-with-caption">
+          <img src="images/looking.png" alt="구인 이미지">
+        </div>
+      </div>
+
+      <!-- 계약 -->
+      <div class="step">
+        <h2><span style="color:#ff8000;">02</span> 계약</h2>
+        <p>모바일을 통해 전자문서 계약 (근로계약서, 사직서 등)</p>
+        <div class="image-with-caption">
+          <img src="images/looking.png" alt="계약 이미지">
+        </div>
+      </div>
+
+      <!-- 관리 -->
+      <div class="step">
+        <h2><span style="color:#ff8000;">03</span> 관리</h2>
+        <p>각 업체에 소장, 반장 등 관리자 배치 운영, 전산시스템으로 관리</p>
+        <div class="image-with-caption">
+          <img src="images/looking.png" alt="관리 이미지">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+<!-- 사회적 활동 팝업 -->
+<div id="socialActivityRightPopupSR" class="socialActivity-right-popup">
+<span class="close-btn" id="closesocialActivitypageBtn">&times;</span>
+  <div class="content-wrapper">
+    <!-- 세로글 -->
+    <div class="vertical-text-CEO">
+      <a href="#">SOCIAL ACTIVITY IN THE COMPANY</a>
+    </div>
+      <div class="message-box">
+        <a href="#">
+        <div class="horizontal-text">
+          <div class="text-table ">
+            <div>
+              <p style="text-align: left;">
+              <strong>
+                <span style="font-size: 18px;">  따뜻한 사람들</span></strong></p><p style="text-align: left;">
+                  <span style="font-size: 30px;color: rgb(255, 128, 0);">  CEO 인사말</span></strong>
+                </p><p style="text-align: left;"></p>
+                <img id="image-box" src="images/CEO.png"  alt="" />
+                <span style="font-size: 30px; color: rgb(255, 128, 0);">
+                  </span>        
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a href="#">
+  </div>
+</div>
+
+
+<!-- 여성 기업 팝업 -->
+<div id="forWomenRightPopupSR" class="forWomen-right-popup">
+<span class="close-btn" id="closeforWomenpageBtn">&times;</span>
+  <div class="content-wrapper">
+    <!-- 세로글 -->
+    <div class="vertical-text-CEO">
+      <a href="#">WOMEN IN THE COMPANY</a>
+    </div>
+      <div class="message-box">
+        <a href="#">
+        <div class="horizontal-text">
+          <div class="text-table ">
+            <div>
+              <p style="text-align: left;">
+              <strong>
+                <span style="font-size: 18px;">  따뜻한 사람들</span></strong></p><p style="text-align: left;">
+                  <span style="font-size: 30px;color: rgb(255, 128, 0);">  CEO 인사말</span></strong></p><p style="text-align: left;"></p>
+                <img id="image-box" src="images/CEO.png"  alt="" />
+                <span style="font-size: 30px; color: rgb(255, 128, 0);">
+                  </span>        
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a href="#">
+  </div>
+</div>
+<footer class="footer">
+  <div class="footer-inner">
+
+    <div class="footer-logo">
+      <img src="images/CI_gray.png" 
+      alt="로고">
+    </div>
+
+    <div class="footer-info">
+
+      <!-- 왼쪽 3줄 -->
+      <div class="footer-col">
+        <p><strong>회사명:</strong> 따뜻한 사람들</p>
+        <p><strong>전화번호:</strong> 02-123-4567</p>
+        <p>Copyright© 따뜻한 사람들 ALL RIGHTS RESERVED</p>
+        
+      </div>
+
+      <!-- 오른쪽 4줄 -->
+      <div class="footer-col">
+        <p><strong>주소:</strong> 평택ㅣ평택시 안중읍 송담5길 10 에이크빌딩 301호</p>
+        <p><strong>주소:</strong> 광명ㅣ광명시 양지로17 제유플레닛 티타워동 2122호</p>
+        <p><strong>주소:</strong> 광주ㅣ광주광역시 서구 상무버들로 48</p>
+        <p><strong>주소:</strong> 울산ㅣ울산 북구 명촌8길 31 한일빌딩 2층 202호</p>
+        
+      </div>
+
+    </div>
+
+  </div>
+</footer>
+
+
+
+<script>
+
+
+
+
+
+
+ (function(){
+      const svg = document.getElementById("chart");
+      const yGrid = svg.querySelector("#y-grid");
+      const plot = svg.querySelector("#plot");
+
+      // 데이터 (맞춰서 바꿔)
+      const labels = ["2018","2019","2020","2021","2022","2023"];
+      const values = [10, 20, 35, 50, 70, 120];
+      const maxY = 120;
+
+      const width = 360;
+      const height = 240;
+      const gap = 15;
+      const barWidth = (width - gap * (labels.length + 1)) / labels.length;
+      const bottomMargin = 20;
+
+      // Y축 + 그리드 그리기
+      function drawY() {
+
+        
+        const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+
+        // Y축
+        const yAxis = document.createElementNS("http://www.w3.org/2000/svg","line");
+        yAxis.setAttribute("x1", 0);
+        yAxis.setAttribute("y1", 0);
+        yAxis.setAttribute("x2", 0);
+        yAxis.setAttribute("y2", height - bottomMargin);
+        yAxis.setAttribute("stroke", "var(--grid-color, #ddd)");
+        yAxis.setAttribute("stroke-width", "1.5");
+        g.appendChild(yAxis);
+
+        // 그리드 + 레이블
+        const steps = 5;
+        for (let i = 1; i <= steps; i++) {
+          const v = (maxY / steps) * i;
+          const y = (height - bottomMargin) - (v / maxY) * (height - bottomMargin);
+
+          const line = document.createElementNS("http://www.w3.org/2000/svg","line");
+          line.setAttribute("x1", 0);
+          line.setAttribute("y1", y);
+          line.setAttribute("x2", width);
+          line.setAttribute("y2", y);
+          line.setAttribute("class", "y-grid-line");
+          g.appendChild(line);
+
+          const label = document.createElementNS("http://www.w3.org/2000/svg","text");
+          label.setAttribute("x", -5);
+          label.setAttribute("y", y + 4);
+          label.setAttribute("class", "y-label");
+          label.textContent = v;
+          g.appendChild(label);
+        }
+
+        yGrid.appendChild(g);
+      }
+
+      // 막대 + 선 + 포인트 + 라벨 생성
+      function drawPlot() {
+        const g = document.createElementNS("http://www.w3.org/2000/svg","g");
+        plot.appendChild(g);
+
+        const bars = [];
+        const points = [];
+
+        labels.forEach((lbl, i) => {
+          const x = gap + i * (barWidth + gap);
+          const val = values[i];
+          const barHeight = (val / maxY) * (height - bottomMargin);
+          const y = (height - bottomMargin) - barHeight;
+
+          // 막대
+          const rect = document.createElementNS("http://www.w3.org/2000/svg","rect");
+          rect.setAttribute("x", x);
+          rect.setAttribute("y", y);
+          rect.setAttribute("width", barWidth);
+          rect.setAttribute("height", barHeight);
+          rect.setAttribute("class", "bar");
+          g.appendChild(rect);
+          bars.push(rect);
+
+          // 포인트
+          const cx = x + barWidth / 2;
+          const cy = y;
+          const circle = document.createElementNS("http://www.w3.org/2000/svg","circle");
+          circle.setAttribute("cx", cx);
+          circle.setAttribute("cy", cy);
+          circle.setAttribute("r", 4);
+          circle.setAttribute("class", "point");
+          g.appendChild(circle);
+          points.push({ cx, cy, el: circle });
+
+          // 값 라벨
+          const valLbl = document.createElementNS("http://www.w3.org/2000/svg","text");
+          valLbl.setAttribute("x", cx);
+          valLbl.setAttribute("y", cy - 8);
+          valLbl.setAttribute("class", "val-label");
+          valLbl.textContent = val;
+          g.appendChild(valLbl);
+
+          // x축 라벨
+          const xLbl = document.createElementNS("http://www.w3.org/2000-svg","text");
+          xLbl.setAttribute("x", cx);
+          xLbl.setAttribute("y", height - bottomMargin + 15);
+          xLbl.setAttribute("class", "x-label");
+          xLbl.textContent = lbl;
+          g.appendChild(xLbl);
+        });
+
+        // 선 연결
+        const poly = document.createElementNS("http://www.w3.org/2000/svg","polyline");
+        poly.setAttribute("class", "connect-line");
+        const pts = points.map(p => `${p.cx},${p.cy}`).join(" ");
+        poly.setAttribute("points", pts);
+        g.appendChild(poly);
+
+        // 마지막 값 라벨
+        const last = points[points.length - 1];
+        const finalLbl = document.createElementNS("http://www.w3.org/2000/svg","text");
+        finalLbl.setAttribute("x", last.cx);
+        finalLbl.setAttribute("y", last.cy - 25);
+        finalLbl.setAttribute("class", "final-label");
+        finalLbl.textContent = values[values.length - 1] + " 단위";
+        g.appendChild(finalLbl);
+
+        // 애니메이션
+        setTimeout(() => {
+          bars.forEach((bar, idx) => {
+            setTimeout(() => bar.classList.add("show"), idx * 200);
+          });
+          points.forEach((pt, idx) => {
+            setTimeout(() => {
+              pt.el.classList.add("show");
+              // 대응하는 값 라벨
+              const lbl = g.querySelectorAll(".val-label")[idx];
+              lbl.classList.add("show");
+            }, bars.length * 200 + idx * 150);
+          });
+
+          setTimeout(() => {
+            poly.style.strokeDashoffset = "0";
+          }, bars.length * 200 + points.length * 150 + 300);
+
+          setTimeout(() => {
+            finalLbl.style.opacity = 1;
+          }, bars.length * 200 + points.length * 150 + 900);
+        }, 500);
+      }
+
+      drawY();
+      drawPlot();
+
+    })();
+
+
+
+
+
+
+
+  const nextBtn = document.querySelector('.next-button');
+  const slideImg = document.getElementById('slideImage');
+
+  nextBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    slideImg.classList.toggle('slide-in');
+  });
+
+
+
+const scrollPopup = document.getElementById('CEORightPopupSR');
+  const closeBtn = document.getElementById('closeScrollPopup');
+  let popupShown = false;
+/*
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY || window.pageYOffset;
+
+    // 예: 300px 이상 스크롤 시 팝업 표시
+    if(scrollY >500 && !popupShown){
+      scrollPopup.style.display = 'block';
+      scrollPopup.classList.add('show');
+      popupShown = true;
+    }
+
+    if(scrollY <20 ){
+      scrollPopup.style.display = 'none';
+      
+      popupShown = false;
+    }
+  });
+
+
+*/
+
+  
+  
+document.addEventListener('DOMContentLoaded', function () 
+{
+   let modalShown = false;
+
+  const modal = document.getElementById('scroll-modal');
+  const closeBtn = modal?.querySelector('.close-btn'); // 모달 내부에서만 찾음
+
+  if (!modal) {
+    console.error("❌ scroll-modal 요소를 찾을 수 없습니다.");
+    return;
+  }
+
+  // 스크롤 이벤트
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY || window.pageYOffset;
+    console.log("스크롤 위치:", scrollY);
+
+    if (scrollY > 100 && !modalShown) {
+      modal.classList.add('show'); // 모달 보이기
+      modalShown = true;
+    }
+  });
+
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobileSlideMenu');
+    const mobileCloseBtn = document.getElementById('mobileCloseBtn');
+
+    // 메뉴 열기
+    mobileBtn.addEventListener('click', function () {
+      mobileMenu.classList.add('open');
+      mobileMenu.classList.remove('closing');
+    });
+
+    // 메뉴 닫기
+    mobileCloseBtn.addEventListener('click', function () {
+      mobileMenu.classList.add('closing');
+      mobileMenu.classList.remove('open');
+      // 닫기 애니메이션 끝나고 display:none 적용
+      setTimeout(() => {
+        mobileMenu.classList.remove('closing');
+      }, 300);
+    });
+
+    // 메뉴 외부 클릭 시 닫기
+    document.addEventListener('click', function (e) 
+    {
+      if (!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)) {
+        if (mobileMenu.classList.contains('open')) {
+          mobileMenu.classList.add('closing');
+          mobileMenu.classList.remove('open');
+          setTimeout(() => {
+            mobileMenu.classList.remove('closing');
+          }, 300);
+        }
+      }
+    });
+
+
+  });
+
+function triggerMobileAnimation() 
+{
+  const isMobile = window.innerWidth <= 1400;
+  if (isMobile) 
+  {
+    document.querySelector('.circle1')?.classList.add('animate');
+    document.querySelector('.circle2')?.classList.add('animate');
+  }
+}
+
+window.addEventListener('DOMContentLoaded', triggerMobileAnimation);
+window.addEventListener('resize', triggerMobileAnimation);
+
+const infoPopup = document.getElementById('infoPopup');
+const closePopupBtn = document.getElementById('closePopupBtn');
+
+
+
+
+// 1.사업분야
+
+
+const businessPartLeftSubMenu = document.getElementById('businessPartLeftSubMenu');
+
+const CEOPartLeftSubMenu = document.getElementById('CEOPartLeftSubMenu');
+const companyCustomersPartSubMenu = document.getElementById('companyCustomersPartSubMenu');
+const companyLeftPopup = document.getElementById('companyLeftPopup');
+const companyInforLeftSubMenu = document.getElementById('companyInforLeftSubMenu');
+
+
+
+
+const customerPartPartRightPopup = document.getElementById('customerPartPartRightPopup');
+const businessPartRightPopup = document.getElementById('businessPartRightPopup');
+const CEORightPopup = document.getElementById('CEORightPopup');   // 버튼
+
+
+const CEORightPopupSR = document.getElementById('CEORightPopupSR'); // 팝업
+const businessrightPopupSR = document.getElementById('businessrightPopupSR');
+const headinformationPopupSR = document.getElementById('headinformationPopupSR');
+
+
+const servicesRightPopupSR = document.getElementById('servicesRightPopupSR');  //문제
+
+const lawRightPopupSR = document.getElementById('lawRightPopupSR');
+const efficientRightPopupSR = document.getElementById('efficientRightPopupSR');
+const socialActivityRightPopupSR = document.getElementById('socialActivityRightPopupSR');
+const forWomenRightPopupSR = document.getElementById('forWomenRightPopupSR');
+
+
+
+
+
+const law_and_ManagingLeftPartSubMenu = document.getElementById('law_and_ManagingLeftPartSubMenu');
+const Managing_EfficientlyPartLeftSubMenu = document.getElementById('Managing_EfficientlyPartLeftSubMenu');
+const socialActivityLeftPartSubMenu = document.getElementById('socialActivityLeftPartSubMenu');
+const forWomenPartLeftSubMenu = document.getElementById('forWomenPartLeftSubMenu');
+
+const closemanagerBtn = document.getElementById('closemanagerBtn');
+const closebusinessBtn = document.getElementById('closebusinessBtn');
+const closecustomerBtn = document.getElementById('closecustomerBtn');
+const closeCEOpageBtn = document.getElementById('closeCEOpageBtn');
+
+const closeforWomenpageBtn = document.getElementById('closeforWomenpageBtn');
+
+const closeefficientpageBtn = document.getElementById('closeefficientpageBtn');
+const closesocialActivitypageBtn = document.getElementById('closesocialActivitypageBtn');
+
+
+
+
+  
+  const closeServicesBtn = document.getElementById('closeservicespageBtn');
+
+
+
+
+
+
+
+
+
+businessPartLeftSubMenu.addEventListener('click', () => {
+  
+  businessLeftPopup.style.display = 'block';
+  customersLeftPopup.style.display = 'none';
+  managersLeftPopup.style.display = 'none';
+  socialLeftPopup.style.display = 'none';
+
+  businessrightPopupSR.style.display = 'block' ; 
+  CEORightPopupSR.style.display = 'none'  ;
+  servicesRightPopupSR.style.display = 'none' ;
+  lawRightPopupSR.style.display = 'none'; 
+  efficientRightPopupSR.style.display = 'none';
+  socialActivityRightPopupSR.style.display = 'none';
+  forWomenRightPopupSR.style.display = 'none';
+  
+});
+
+
+closebusinessBtn.addEventListener('click', () => {
+  servicesRightPopupSR.style.display = 'none';
+});
+
+customerPartPartRightPopup.addEventListener('click', () => {
+
+  businessLeftPopup.style.display = 'none';
+  customersLeftPopup.style.display = 'block';
+  managersLeftPopup.style.display = 'none';
+  socialLeftPopup.style.display = 'none';
+
+  businessrightPopupSR.style.display = 'none' ; 
+  CEORightPopupSR.style.display = 'none'  ;
+  servicesRightPopupSR.style.display = 'block' ;
+  lawRightPopupSR.style.display = 'none'; 
+  efficientRightPopupSR.style.display = 'none';
+  socialActivityRightPopupSR.style.display = 'none';
+  forWomenRightPopupSR.style.display = 'none';
+
+});
+
+
+
+companyLeftPopup.addEventListener('click', () => {
+   servicesRightPopupSR.style.display = 'block';
+
+});
+
+
+//CEO greeting
+CEOPartLeftSubMenu.addEventListener('click', () => {
+
+
+  businessLeftPopup.style.display = 'block';
+  customersLeftPopup.style.display = 'none';
+  managersLeftPopup.style.display = 'none';
+  socialLeftPopup.style.display = 'none';
+
+
+  businessrightPopupSR.style.display = 'none' ; 
+  CEORightPopupSR.style.display = 'block'  ;
+  servicesRightPopupSR.style.display = 'none' ;
+  lawRightPopupSR.style.display = 'none'; 
+  efficientRightPopupSR.style.display = 'none';
+  socialActivityRightPopupSR.style.display = 'none';
+  forWomenRightPopupSR.style.display = 'none';
+
+  
+  
+});
+
+
+companyInforLeftSubMenu.addEventListener('click', () => {
+
+
+  businessLeftPopup.style.display = 'block';
+  customersLeftPopup.style.display = 'none';
+  managersLeftPopup.style.display = 'none';
+  socialLeftPopup.style.display = 'none';
+
+
+  businessrightPopupSR.style.display = 'none' ; 
+  CEORightPopupSR.style.display = 'none'  ;
+  servicesRightPopupSR.style.display = 'none' ;
+  lawRightPopupSR.style.display = 'none'; 
+  efficientRightPopupSR.style.display = 'none';
+  socialActivityRightPopupSR.style.display = 'none';
+  forWomenRightPopupSR.style.display = 'none';
+  headinformationPopupSR.style.display = 'block';
+
+  
+  
+});
+
+
+
+
+
+
+
+//For companies
+
+companyCustomersPartSubMenu.addEventListener('click', () => {
+  
+  businessLeftPopup.style.display = 'none';
+  customersLeftPopup.style.display = 'block';
+  managersLeftPopup.style.display = 'none';
+  socialLeftPopup.style.display = 'none';
+
+  businessrightPopupSR.style.display = 'none' ; 
+  CEORightPopupSR.style.display = 'none'  ;
+  servicesRightPopupSR.style.display = 'block' ;
+  lawRightPopupSR.style.display = 'none'; 
+  efficientRightPopupSR.style.display = 'none';
+  socialActivityRightPopupSR.style.display = 'none';
+  forWomenRightPopupSR.style.display = 'none';
+  
+  
+});
+
+
+
+closecustomerBtn.addEventListener('click', () => {
+  customersLeftPopup.style.display = 'none';
+});
+
+
+
+
+
+
+
+
+
+
+//about managing system
+
+law_and_ManagingLeftPartSubMenu.addEventListener('click', () => {
+  
+  businessLeftPopup.style.display = 'none';
+  customersLeftPopup.style.display = 'none';
+  managersLeftPopup.style.display = 'block';
+  socialLeftPopup.style.display = 'none';
+
+  businessrightPopupSR.style.display = 'none' ; 
+  CEORightPopupSR.style.display = 'none'  ;
+  servicesRightPopupSR.style.display = 'none' ;
+  lawRightPopupSR.style.display = 'block'; 
+  efficientRightPopupSR.style.display = 'none';
+  socialActivityRightPopupSR.style.display = 'none';
+  forWomenRightPopupSR.style.display = 'none';
+  
+});
+
+
+
+
+closemanagerBtn.addEventListener('click', () => {
+  managersLeftPopup.style.display = 'none';
+});
+
+
+
+
+
+Managing_EfficientlyPartLeftSubMenu.addEventListener('click', () => {
+  
+  businessLeftPopup.style.display = 'none';
+  customersLeftPopup.style.display = 'none';
+  managersLeftPopup.style.display = 'block';
+  socialLeftPopup.style.display = 'none';
+
+
+  businessrightPopupSR.style.display = 'none' ; 
+  CEORightPopupSR.style.display = 'none'  ;
+  servicesRightPopupSR.style.display = 'none' ;
+  lawRightPopupSR.style.display = 'none'; 
+  efficientRightPopupSR.style.display = 'block';
+  socialActivityRightPopupSR.style.display = 'none';
+  forWomenRightPopupSR.style.display = 'none';
+
+
+
+});
+
+
+
+
+closeefficientpageBtn.addEventListener('click', () => {
+  efficientRightPopupSR.style.display = 'none';
+});
+
+
+
+
+
+//Social acting
+
+socialActivityLeftPartSubMenu.addEventListener('click', () => {
+  
+  businessLeftPopup.style.display = 'none';
+  customersLeftPopup.style.display = 'none';
+  managersLeftPopup.style.display = 'none';
+  socialLeftPopup.style.display = 'block';
+   
+  businessrightPopupSR.style.display = 'none' ; 
+  CEORightPopupSR.style.display = 'none'  ;
+  servicesRightPopupSR.style.display = 'none' ;
+  lawRightPopupSR.style.display = 'none'; 
+  efficientRightPopupSR.style.display = 'none';
+  socialActivityRightPopupSR.style.display = 'block';
+  forWomenRightPopupSR.style.display = 'none';
+});
+
+
+
+
+closesocialActivitypageBtn.addEventListener('click', () => {
+  socialActivityRightPopupSR.style.display = 'none';
+});
+
+const closesocialBtn = document.getElementById('closesocialBtn');
+
+closesocialBtn.addEventListener('click', () => {
+  socialLeftPopup.style.display = 'none';
+});
+
+
+
+
+//company which women work
+
+forWomenPartLeftSubMenu.addEventListener('click', () => {
+  
+  businessLeftPopup.style.display = 'none';
+  customersLeftPopup.style.display = 'none';
+  managersLeftPopup.style.display = 'none';
+  socialLeftPopup.style.display = 'block';
+
+  servicesRightPopupSR.style.display = 'none'  
+  lawRightPopupSR.style.display = 'none';
+  efficientRightPopupSR.style.display = 'none';
+  forWomenRightPopupSR.style.display = 'block';
+ 
+  
+});
+
+
+
+closeforWomenpageBtn.addEventListener('click', () => {
+  forWomenRightPopupSR.style.display = 'none';
+});
+
+
+
+
+
+
+
+
+businessPartRightPopup.addEventListener('click', () => {
+  
+  CEORightPopupSR.style.display = 'none';
+  businessrightPopupSR.style.display = 'none';
+});
+
+businessPartRightPopup.addEventListener('click', (e) => {
+  e.preventDefault();
+  businessrightPopupSR.style.display = 'block';
+});
+
+const closebusinesspageBtn = document.getElementById('closebusinesspageBtn');
+
+closebusinesspageBtn.addEventListener('click', () => {
+  businessrightPopupSR.style.display = 'none';
+});
+
+
+
+
+
+// 버튼 클릭 → 팝업 열기
+CEORightPopup.addEventListener('click', (e) => {
+  e.preventDefault();
+  CEORightPopupSR.style.display = 'block';
+ 
+});
+
+// 닫기 버튼 클릭 → 팝업 닫기
+closeCEOpageBtn.addEventListener('click', () => {
+  CEORightPopupSR.style.display = 'none';
+
+});
+  // 닫기 버튼 클릭 → 서비스 팝업 닫기
+closeServicesBtn.addEventListener('click', () => {
+  servicesRightPopupSR.style.display = 'none';
+});
+
+
+  // 고객용 버튼 클릭 → 서비스 팝업 열기
+
+
+  
+
+
+
+
+
+
+closebusinessBtn.addEventListener('click', () => {
+  businessLeftPopup.style.display = 'none';
+});
+
+
+function openRightCompanyPopup() 
+{
+  businessPopup.classList.remove('hide');
+  businessPopup.style.display = 'block';
+  businessPopup.classList.toggle('show');
+}
+
+
+
+closecompanyBtn.addEventListener('click', () => {
+  companyPopup.style.display = 'none';
+});
+
+companyCustomersPartSubMenu.addEventListener('click', () => {
+  companyPopup.style.display = 'none';
+});
+
+
+
+
+
+
+
+
+
+
+function closeAllRightPopups() {
+  businessrightPopupSR.style.display = 'none';
+  servicesRightPopupSR.style.display = 'none';
+  CEORightPopupSR.style.display = 'none';
+  managingRightPopupSR.style.display = 'none';
+}
+
+
+
+
+
+function openCompanyPopup() 
+{
+  companyPopup.classList.remove('hide');
+  companyPopup.style.display = 'block';
+  companyPopup.classList.toggle('show');
+}
+
+// 팝업 닫기
+function closeCompanyPopup() 
+{
+  companyPopup.classList.remove('show');
+  companyPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  companyPopup.addEventListener('animationend', function handleAnimationEnd() {
+    companyPopup.style.display = 'none';
+    companyPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+
+function bringToFront(popupElement) {
+  topZIndex++;
+  popupElement.style.zIndex = topZIndex;
+}
+
+
+
+  
+  // --- 첫 이미지 관련 스크립트 제거 또는 조건 처리 ---
+const firstImage = document.getElementById('firstImage');
+if (firstImage) 
+{
+  firstImage.addEventListener('click', () => {
+    const rect = firstImage.getBoundingClientRect();
+    infoPopup.style.left = rect.left + window.pageXOffset + 'px';
+    infoPopup.style.top = rect.bottom + window.pageYOffset + 'px';
+    infoPopup.style.display = 'block';
+
+    if (window.innerWidth <= 768) {
+      firstImage.classList.add('first-image-padding');
+    }
+  });
+
+  closePopupBtn.addEventListener('click', () => {
+    infoPopup.style.display = 'none';
+    firstImage.classList.remove('first-image-padding');
+  });
+
+  window.addEventListener('resize', () => {
+    if (infoPopup.style.display === 'block') {
+      const rect = firstImage.getBoundingClientRect();
+      infoPopup.style.left = rect.left + window.pageXOffset + 'px';
+      infoPopup.style.top = rect.bottom + window.pageYOffset + 'px';
+
+      if (window.innerWidth <= 768) {
+        firstImage.classList.add('first-image-padding');
+      } else {
+        firstImage.classList.remove('first-image-padding');
+      }
+    }
+  });
+
+  window.addEventListener('scroll', () => {
+    if (infoPopup.style.display === 'block') {
+      const rect = firstImage.getBoundingClientRect();
+      infoPopup.style.left = rect.left + window.pageXOffset + 'px';
+      infoPopup.style.top = rect.bottom + window.pageYOffset + 'px';
+    }
+  });
+}
+
+
+// 팝업 열기
+
+
+
+
+const submenuToggles = document.querySelectorAll(".has-submenu > a"); // 하위 메뉴가 있는 li에 .has-submenu 클래스
+submenuToggles.forEach(toggle => {
+    toggle.addEventListener("click", (e) => {
+        e.preventDefault(); // 링크 기본 동작 방지
+        const submenu = toggle.nextElementSibling; // 하위 ul 선택
+        if(submenu.style.display === "block") {
+            submenu.style.display = "none";
+        } else {
+            submenu.style.display = "block";
+        }
+    });
+});
+
+
+
+
+function openBusinessPopup() 
+{
+  businessPopup.classList.remove('hide');
+  businessPopup.style.display = 'block';
+  businessPopup.classList.toggle('show');
+}
+
+function openCompanyPopup() 
+{
+  companyPopup.classList.remove('hide');
+  companyPopup.style.display = 'block';
+  companyPopup.classList.toggle('show');
+}
+
+
+
+function openCEOPopup() 
+{
+  CEOPopup.classList.remove('hide');
+  CEOPopup.style.display = 'block';
+  CEOPopup.classList.toggle('show');
+}
+
+
+function openbusinessPopup() 
+{
+  businessLeftPopup.classList.remove('hide');
+  businessLeftPopup.style.display = 'block';
+  businessLeftPopup.classList.toggle('show');
+}
+// 팝업 닫기
+
+
+function closeCompanyPopup() 
+{
+  companyPopup.classList.remove('show');
+  closeBusinessPopup.classList.add('hide');
+  companyPopup.classList.remove('show');
+  companyPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  companyPopup.addEventListener('animationend', function handleAnimationEnd() {
+    companyPopup.style.display = 'none';
+    companyPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+
+
+function closeCEOPopup() 
+{
+  CEORightPopup.classList.remove('show');
+  closeCEOPopup.classList.add('hide');
+  CEORightPopup.classList.remove('show');
+  CEORightPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  CEORightPopup.addEventListener('animationend', function handleAnimationEnd() {
+    CEORightPopup.style.display = 'none';
+    CEORightPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+
+
+// 서비스 소개 팝업 열기
+function openCompanyPopup() 
+{
+  companyPopup.classList.remove('hide');
+  companyPopup.style.display = 'block';
+  companyPopup.classList.toggle('show');
+}
+
+// 팝업 닫기
+function closeCompanyPopup() 
+{
+  companyPopup.classList.remove('show');
+  companyPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  companyPopup.addEventListener('animationend', function handleAnimationEnd() {
+    companyPopup.style.display = 'none';
+    companyPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+
+
+//businessPartSubMenu?.addEventListener('click', openBusinessPopup);
+// 팝업 닫기
+function closeBusinessPopup() 
+{
+  bus.classList.remove('show');
+  closeBusinessPopup.classList.add('hide');
+  businessPopup.classList.remove('show');
+  businessPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  businessPopup.addEventListener('animationend', function handleAnimationEnd() {
+  businessPopup.style.display = 'none';
+  businessPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+function closeCompanyPopup() 
+{
+  bus.classList.remove('show');
+  closeCompanyPopup.classList.add('hide');
+  companyPopup.classList.remove('show');
+  companyPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  companyPopup.addEventListener('animationend', function handleAnimationEnd() {
+  companyPopup.style.display = 'none';
+  companyPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+function closeCEOPopup() 
+{
+  CEOPopup.classList.remove('show');
+  closeCEOPopup.classList.add('hide');
+  CEOPopup.classList.remove('show');
+  CEOPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  CEOPopup.addEventListener('animationend', function handleAnimationEnd() {
+  CEOPopup.style.display = 'none';
+  CEOPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+// 이벤트 연결
+recruitImage?.addEventListener('click', openRecruitPopup);
+
+recruitSubMenu?.addEventListener('click', (e) => {
+  e.preventDefault();
+  openRecruitPopup();
+});
+recruitMenuMobile?.addEventListener('click', (e) => {
+  e.preventDefault();
+  mobileSlideMenu.classList.remove('open');
+  openRecruitPopup();
+});
+closeRecruitBtn.addEventListener('click', closeRecruitPopup);
+
+
+
+recruitSubMenu?.addEventListener('click', (e) => {
+  e.preventDefault();
+  openRecruitPopup();
+});
+recruitMenuMobile?.addEventListener('click', (e) => {
+  e.preventDefault();
+  mobileSlideMenu.classList.remove('open');
+  openRecruitPopup();
+});
+closeRecruitBtn.addEventListener('click', closeRecruitPopup);
+
+function openRecruitPopup() 
+{
+  recruitPopup.classList.remove('hide');
+  recruitPopup.style.display = 'block';
+  recruitPopup.classList.toggle('show');
+}
+
+// 팝업 닫기
+function closeRecruitPopup() 
+{
+  recruitPopup.classList.remove('show');
+  recruitPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  recruitPopup.addEventListener('animationend', function handleAnimationEnd() 
+  {
+    recruitPopup.style.display = 'none';
+    recruitPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+
+
+
+
+function openCompanyPopup() 
+{
+  companyPopup.classList.remove('hide');
+  companyPopup.style.display = 'block';
+  companyPopup.classList.toggle('show');
+}
+
+// 팝업 닫기
+function closeCompanyPopup() 
+{
+  companyPopup.classList.remove('show');
+  companyPopup.classList.add('hide');
+
+  // 애니메이션 끝난 후 display:none 처리
+  companyPopup.addEventListener('animationend', function handleAnimationEnd() {
+    companyPopup.style.display = 'none';
+    companyPopup.removeEventListener('animationend', handleAnimationEnd);
+  });
+}
+
+
+
+function openBusinessMenu() {
+  
+  mobileSlideMenu.classList.add('open');
+  overlay.classList.remove('hidden');
+}
+
+// 메뉴 닫기 함수
+function closeBusinessMenu() {
+  mobileSlideMenu.classList.remove('open');
+  overlay.classList.add('hidden');
+}
+
+
+
+
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');  // 햄버거 버튼
+const mobileSlideMenu = document.getElementById('mobileSlideMenu');  // 모바일 메뉴
+const mobileCloseBtn = document.getElementById('mobileCloseBtn');    // 메뉴 닫기 버튼 (×)
+const overlay = document.getElementById('overlay');                  // 오버레이
+
+
+
+
+// 메뉴 열기 함수
+function openMobileMenu() {
+  
+  mobileSlideMenu.classList.add('open');
+  overlay.classList.remove('hidden');
+}
+
+// 메뉴 닫기 함수
+function closeMobileMenu() {
+  mobileSlideMenu.classList.remove('open');
+  overlay.classList.add('hidden');
+}
+
+mobileMenuBtn.addEventListener('click', () => {
+  const isOpen = mobileSlideMenu.classList.contains('open');
+
+  if (isOpen) {
+    closeMobileMenu(); // 열려 있으면 닫기
+  } else {
+    openMobileMenu();  // 닫혀 있으면 열기
+  }
+});
+
+
+
+// 닫기 버튼 클릭 시 메뉴 닫기
+mobileCloseBtn.addEventListener('click', closeMobileMenu);
+
+// 오버레이 클릭 시 메뉴 닫기
+overlay.addEventListener('click', closeMobileMenu);
+
+
+
+const menuItems = document.querySelectorAll(".main-menu .has-submenu > a");
+
+menuItems.forEach(item => {
+    item.addEventListener("click", (e) => {
+        e.preventDefault(); // 링크 기본 동작 방지
+        const submenu = item.nextElementSibling;
+
+        // 다른 열려있는 메뉴 닫기
+        document.querySelectorAll(".main-menu .submenu").forEach(sm => {
+            if(sm !== submenu) sm.style.display = "none";
+        });
+
+        // 현재 메뉴 토글
+        submenu.style.display = (submenu.style.display === "block") ? "none" : "block";
+    });
+});
+
+document.querySelectorAll('.submenu  > li > a').forEach(menu => {
+  menu.addEventListener('click', function(e) {
+    e.preventDefault(); // 링크 이동 막기
+    const submenu = this.nextElementSibling;
+    if (submenu) {
+      submenu.classList.toggle('open'); // 열고 닫기 토글
+    }
+  });
+});
+
+// 메뉴 외부 클릭 시 하위 메뉴 닫기
+document.addEventListener("click", (e) => {
+    const isClickInsideMenu = e.target.closest(".main-menu");
+    if(!isClickInsideMenu) {
+        document.querySelectorAll(".main-menu .submenu").forEach(sm => {
+            sm.style.display = "none";
+        });
+    }
+});
+
+
+
+
+
+
+</script>
+
+</body>
+<div class="circle circle1"></div>
+<div class="circle circle2"></div>
+</html>
